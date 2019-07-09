@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Provides simple benchmarking and profiling. To display the statistics that
  * have been collected, load the `profiler/stats` [View]:
@@ -8,8 +8,8 @@
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2009-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Profiler {
 
@@ -21,7 +21,7 @@ class Kohana_Profiler {
 	/**
 	 * @var  array  collected benchmarks
 	 */
-	protected static $_marks = array();
+	protected static $_marks = [];
 
 	/**
 	 * Starts a new benchmark and returns a unique token. The returned token
@@ -40,8 +40,7 @@ class Kohana_Profiler {
 		// Create a unique token based on the counter
 		$token = 'kp/'.base_convert($counter++, 10, 32);
 
-		Profiler::$_marks[$token] = array
-		(
+		Profiler::$_marks[$token] = [
 			'group' => strtolower($group),
 			'name'  => (string) $name,
 
@@ -52,7 +51,7 @@ class Kohana_Profiler {
 			// Set the stop keys without values
 			'stop_time'    => FALSE,
 			'stop_memory'  => FALSE,
-		);
+		];
 
 		return $token;
 	}
@@ -97,7 +96,7 @@ class Kohana_Profiler {
 	 */
 	public static function groups()
 	{
-		$groups = array();
+		$groups = [];
 
 		foreach (Profiler::$_marks as $token => $mark)
 		{
@@ -120,14 +119,14 @@ class Kohana_Profiler {
 	public static function stats(array $tokens)
 	{
 		// Min and max are unknown by default
-		$min = $max = array(
+		$min = $max = [
 			'time' => NULL,
-			'memory' => NULL);
+			'memory' => NULL];
 
 		// Total values are always integers
-		$total = array(
+		$total = [
 			'time' => 0,
-			'memory' => 0);
+			'memory' => 0];
 
 		foreach ($tokens as $token)
 		{
@@ -169,15 +168,15 @@ class Kohana_Profiler {
 		$count = count($tokens);
 
 		// Determine the averages
-		$average = array(
+		$average = [
 			'time' => $total['time'] / $count,
-			'memory' => $total['memory'] / $count);
+			'memory' => $total['memory'] / $count];
 
-		return array(
+		return [
 			'min' => $min,
 			'max' => $max,
 			'total' => $total,
-			'average' => $average);
+			'average' => $average];
 	}
 
 	/**
@@ -198,7 +197,7 @@ class Kohana_Profiler {
 			: array_intersect_key(Profiler::groups(), array_flip( (array) $groups));
 
 		// All statistics
-		$stats = array();
+		$stats = [];
 
 		foreach ($groups as $group => $names)
 		{
@@ -212,19 +211,19 @@ class Kohana_Profiler {
 		}
 
 		// Group stats
-		$groups = array();
+		$groups = [];
 
 		foreach ($stats as $group => $names)
 		{
 			// Min and max are unknown by default
-			$groups[$group]['min'] = $groups[$group]['max'] = array(
+			$groups[$group]['min'] = $groups[$group]['max'] = [
 				'time' => NULL,
-				'memory' => NULL);
+				'memory' => NULL];
 
 			// Total values are always integers
-			$groups[$group]['total'] = array(
+			$groups[$group]['total'] = [
 				'time' => 0,
-				'memory' => 0);
+				'memory' => 0];
 
 			foreach ($names as $total)
 			{
@@ -286,14 +285,13 @@ class Kohana_Profiler {
 			$mark['stop_memory'] = memory_get_usage();
 		}
 
-		return array
-		(
+		return [
 			// Total time in seconds
 			$mark['stop_time'] - $mark['start_time'],
 
 			// Amount of memory in bytes
 			$mark['stop_memory'] - $mark['start_memory'],
-		);
+		];
 	}
 
 	/**
@@ -313,17 +311,17 @@ class Kohana_Profiler {
 		if ( ! is_array($stats) OR $stats['count'] > Profiler::$rollover)
 		{
 			// Initialize the stats array
-			$stats = array(
-				'min'   => array(
+			$stats = [
+				'min'   => [
 					'time'   => NULL,
-					'memory' => NULL),
-				'max'   => array(
+					'memory' => NULL],
+				'max'   => [
 					'time'   => NULL,
-					'memory' => NULL),
-				'total' => array(
+					'memory' => NULL],
+				'total' => [
 					'time'   => NULL,
-					'memory' => NULL),
-				'count' => 0);
+					'memory' => NULL],
+				'count' => 0];
 		}
 
 		// Get the application run time
@@ -366,9 +364,9 @@ class Kohana_Profiler {
 		$stats['count']++;
 
 		// Determine the averages
-		$stats['average'] = array(
+		$stats['average'] = [
 			'time'   => $stats['total']['time'] / $stats['count'],
-			'memory' => $stats['total']['memory'] / $stats['count']);
+			'memory' => $stats['total']['memory'] / $stats['count']];
 
 		// Cache the new stats
 		Kohana::cache('profiler_application_stats', $stats);

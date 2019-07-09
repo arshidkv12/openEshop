@@ -7,8 +7,8 @@ include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
  * @group      kohana.cache
  * @category   Test
  * @author     Kohana Team
- * @copyright  (c) 2009-2012 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethodsTest {
 
@@ -32,40 +32,40 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
 	 */
 	public function provider_increment()
 	{
-		return array(
-			array(
+		return [
+			[
 				0,
-				array(
+				[
 					'id'    => 'increment_test_1',
 					'step'  => 1
-				),
+				],
 				1
-			),
-			array(
+			],
+			[
 				1,
-				array(
+				[
 					'id'    => 'increment_test_2',
 					'step'  => 1
-				),
+				],
 				2
-			),
-			array(
+			],
+			[
 				5,
-				array(
+				[
 					'id'    => 'increment_test_3',
 					'step'  => 5
-				),
+				],
 				10
-			),
-			array(
+			],
+			[
 				NULL,
-				array(
+				[
 					'id'    => 'increment_test_4',
 					'step'  => 1
-				),
+				],
 				FALSE
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -105,40 +105,40 @@ abstract class Kohana_CacheArithmeticMethodsTest extends Kohana_CacheBasicMethod
 	 */
 	public function provider_decrement()
 	{
-		return array(
-			array(
+		return [
+			[
 				10,
-				array(
+				[
 					'id'    => 'decrement_test_1',
 					'step'  => 1
-				),
+				],
 				9
-			),
-			array(
+			],
+			[
 				10,
-				array(
+				[
 					'id'    => 'decrement_test_2',
 					'step'  => 2
-				),
+				],
 				8
-			),
-			array(
+			],
+			[
 				50,
-				array(
+				[
 					'id'    => 'decrement_test_3',
 					'step'  => 5
-				),
+				],
 				45
-			),
-			array(
+			],
+			[
 				NULL,
-				array(
+				[
 					'id'    => 'decrement_test_4',
 					'step'  => 1
-				),
+				],
 				FALSE
-			),
-		);	}
+			],
+		];	}
 
 	/**
 	 * Test for [Cache_Arithmetic::decrement()]

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * @package    Kohana/Codebench
  * @category   Tests
@@ -12,12 +12,11 @@ class Bench_ExplodeLimit extends Codebench {
 
 	public $loops = 10000;
 
-	public $subjects = array
-	(
+	public $subjects = [
 		'http://example.com/articles/123a/view',
 		'http://example.com/articles/123a/view/x/x/x/x/x',
 		'http://example.com/articles/123a/view/x/x/x/x/x/x/x/x/x/x/x/x/x/x/x/x/x/x',
-	);
+	];
 
 	public function bench_explode_without_limit($subject)
 	{

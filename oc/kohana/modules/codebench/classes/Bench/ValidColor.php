@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php
 /**
  * @package    Kohana/Codebench
  * @category   Tests
@@ -17,8 +17,7 @@ class Bench_ValidColor extends Codebench {
 
 	public $loops = 10000;
 
-	public $subjects = array
-	(
+	public $subjects = [
 		// Valid colors
 		'aaA',
 		'123',
@@ -32,7 +31,7 @@ class Bench_ValidColor extends Codebench {
 		'#1234567',
 		"#000\n",
 		'}§è!çà%$z',
-	);
+	];
 
 	// Note that I added the D modifier to corey's regexes. We need to match exactly
 	// the same if we want the benchmarks to be of any value.

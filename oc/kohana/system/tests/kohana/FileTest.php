@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('Kohana bootstrap needs to be included before tests run');
+<?php
 
 /**
  * Tests Kohana File helper
@@ -11,8 +11,8 @@
  * @category   Tests
  * @author     Kohana Team
  * @author     Jeremy Bush <contractfrombelow@gmail.com>
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_FileTest extends Unittest_TestCase
 {
@@ -23,10 +23,10 @@ class Kohana_FileTest extends Unittest_TestCase
 	 */
 	public function provider_mime()
 	{
-		return array(
+		return [
 			// $value, $result
-			array(Kohana::find_file('tests', 'test_data/github', 'png'), 'image/png'),
-		);
+			[Kohana::find_file('tests', 'test_data/github', 'png'), 'image/png'],
+		];
 	}
 
 	/**
@@ -50,10 +50,10 @@ class Kohana_FileTest extends Unittest_TestCase
 	 */
 	public function provider_split_join()
 	{
-		return array(
+		return [
 			// $value, $result
-			array(Kohana::find_file('tests', 'test_data/github', 'png'), .01, 1),
-		);
+			[Kohana::find_file('tests', 'test_data/github', 'png'), .01, 1],
+		];
 	}
 
 	/**

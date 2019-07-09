@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
 class Kohana_HTTP_Exception_405 extends HTTP_Exception_Expected {
 
@@ -32,7 +32,7 @@ class Kohana_HTTP_Exception_405 extends HTTP_Exception_Expected {
 	 */
 	public function check()
 	{
-		if ($location = $this->headers('allow') === NULL)
+		if ($this->headers('allow') === NULL)
 			throw new Kohana_Exception('A list of allowed methods must be specified');
 
 		return TRUE;

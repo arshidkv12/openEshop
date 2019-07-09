@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * Class property documentation generator.
  *
  * @package    Kohana/Userguide
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2013 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Kodoc_Property extends Kodoc {
 
@@ -63,14 +63,11 @@ class Kohana_Kodoc_Property extends Kodoc {
 
 		$this->property = $property;
 
-		// Show the value of static properties, but only if they are public or we are php 5.3 or higher and can force them to be accessible
-		if ($property->isStatic() AND ($property->isPublic() OR version_compare(PHP_VERSION, '5.3', '>=')))
+		// Show the value of static properties
+		if ($property->isStatic())
 		{
 			// Force the property to be accessible
-			if (version_compare(PHP_VERSION, '5.3', '>='))
-			{
-				$property->setAccessible(TRUE);
-			}
+			$property->setAccessible(TRUE);
 
 			// Don't debug the entire object, just say what kind of object it is
 			if (is_object($property->getValue($class)))
@@ -84,7 +81,7 @@ class Kohana_Kodoc_Property extends Kodoc {
 		}
 
 		// Store the defult property
-		$this->default = Debug::vars($default);;
+		$this->default = Debug::vars($default);
 	}
 
 } // End Kodoc_Property

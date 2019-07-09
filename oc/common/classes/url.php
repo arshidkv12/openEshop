@@ -42,7 +42,7 @@ class URL extends Kohana_URL {
      * @return  string
      * @uses    URL::base
      */
-    public static function site($uri = '', $protocol = NULL, $index = TRUE)
+    public static function site($uri = '', $protocol = NULL, $index = TRUE, $subdomain = NULL)
     {
         // Chop off possible scheme, host, port, user and pass parts
         $path = preg_replace('~^[-a-z0-9+.]++://[^/]++/?~', '', trim($uri, '/'));

@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Database query builder for INSERT statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query
  * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 
@@ -14,10 +14,10 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 	protected $_table;
 
 	// (...)
-	protected $_columns = array();
+	protected $_columns = [];
 
 	// VALUES (...)
-	protected $_values = array();
+	protected $_values = [];
 
 	/**
 	 * Set the table and columns for an insert.
@@ -134,14 +134,13 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 		$query = 'INSERT INTO '.$db->quote_table($this->_table);
 
 		// Add the column names
-		$query .= ' ('.implode(', ', array_map(array($db, 'quote_column'), $this->_columns)).') ';
+		$query .= ' ('.implode(', ', array_map([$db, 'quote_column'], $this->_columns)).') ';
 
 		if (is_array($this->_values))
 		{
 			// Callback for quoting values
-			$quote = array($db, 'quote');
 
-			$groups = array();
+			$groups = [];
 			foreach ($this->_values as $group)
 			{
 				foreach ($group as $offset => $value)
@@ -167,7 +166,7 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 
 		$this->_sql = $query;
 
-		return parent::compile($db);;
+		return parent::compile($db);
 	}
 
 	public function reset()
@@ -175,9 +174,9 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 		$this->_table = NULL;
 
 		$this->_columns =
-		$this->_values  = array();
+		$this->_values  = [];
 
-		$this->_parameters = array();
+		$this->_parameters = [];
 
 		$this->_sql = NULL;
 

@@ -12,8 +12,6 @@
  * We will use them with extension .htm to avoid repetitions with others.
  */
 
-
-
 /**
  * search
  */

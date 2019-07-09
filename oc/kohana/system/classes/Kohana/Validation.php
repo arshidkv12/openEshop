@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Array and variable validation.
  *
  * @package    Kohana
  * @category   Security
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Validation implements ArrayAccess {
 
@@ -22,22 +22,22 @@ class Kohana_Validation implements ArrayAccess {
 	}
 
 	// Bound values
-	protected $_bound = array();
+	protected $_bound = [];
 
 	// Field rules
-	protected $_rules = array();
+	protected $_rules = [];
 
 	// Field labels
-	protected $_labels = array();
+	protected $_labels = [];
 
 	// Rules that are executed even when the value is empty
-	protected $_empty_rules = array('not_empty', 'matches');
+	protected $_empty_rules = ['not_empty', 'matches'];
 
 	// Error list, field => rule
-	protected $_errors = array();
+	protected $_errors = [];
 
 	// Array to validate
-	protected $_data = array();
+	protected $_data = [];
 
 	/**
 	 * Sets the unique "any field" key and creates an ArrayObject from the
@@ -213,7 +213,7 @@ class Kohana_Validation implements ArrayAccess {
 		if ($params === NULL)
 		{
 			// Default to array(':value')
-			$params = array(':value');
+			$params = [':value'];
 		}
 
 		if ($field !== TRUE AND ! isset($this->_labels[$field]))
@@ -223,7 +223,7 @@ class Kohana_Validation implements ArrayAccess {
 		}
 
 		// Store the rule and params for this rule
-		$this->_rules[$field][] = array($rule, $params);
+		$this->_rules[$field][] = [$rule, $params];
 
 		return $this;
 	}
@@ -293,7 +293,7 @@ class Kohana_Validation implements ArrayAccess {
 		}
 
 		// New data set
-		$data = $this->_errors = array();
+		$data = $this->_errors = [];
 
 		// Store the original data because this class should not modify it post-validation
 		$original = $this->_data;
@@ -314,7 +314,7 @@ class Kohana_Validation implements ArrayAccess {
 				if ( ! isset($rules[$field]))
 				{
 					// Initialize the rules for this field
-					$rules[$field] = array();
+					$rules[$field] = [];
 				}
 
 				// Append the rules
@@ -340,11 +340,10 @@ class Kohana_Validation implements ArrayAccess {
 			$value = $this[$field];
 
 			// Bind the field name and value to :field and :value respectively
-			$this->bind(array
-			(
+			$this->bind([
 				':field' => $field,
 				':value' => $value,
-			));
+			]);
 
 			foreach ($set as $array)
 			{
@@ -459,7 +458,7 @@ class Kohana_Validation implements ArrayAccess {
 	 */
 	public function error($field, $error, array $params = NULL)
 	{
-		$this->_errors[$field] = array($error, $params);
+		$this->_errors[$field] = [$error, $params];
 
 		return $this;
 	}
@@ -492,7 +491,7 @@ class Kohana_Validation implements ArrayAccess {
 		}
 
 		// Create a new message list
-		$messages = array();
+		$messages = [];
 
 		foreach ($this->_errors as $field => $set)
 		{
@@ -516,10 +515,10 @@ class Kohana_Validation implements ArrayAccess {
 			}
 
 			// Start the translation values list
-			$values = array(
+			$values = [
 				':field' => $label,
 				':value' => Arr::get($this, $field),
-			);
+			];
 
 			if (is_array($values[':value']))
 			{

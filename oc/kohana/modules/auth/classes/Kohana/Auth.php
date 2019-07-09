@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 /**
  * User authorization library. Handles user login and logout, as well as secure
  * password hashing.
  *
  * @package    Kohana/Auth
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 abstract class Kohana_Auth {
 
@@ -50,7 +50,7 @@ abstract class Kohana_Auth {
 	 * @param   array  $config  Config Options
 	 * @return  void
 	 */
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		// Save the config in the object
 		$this->_config = $config;
@@ -168,4 +168,4 @@ abstract class Kohana_Auth {
 		return TRUE;
 	}
 
-} // End Auth
+}

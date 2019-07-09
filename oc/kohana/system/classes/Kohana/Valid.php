@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Validation rules.
  *
  * @package    Kohana
  * @category   Security
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Valid {
 
@@ -24,7 +24,7 @@ class Kohana_Valid {
 		}
 
 		// Value cannot be NULL, FALSE, '', or an empty array
-		return ! in_array($value, array(NULL, FALSE, '', array()), TRUE);
+		return ! in_array($value, [NULL, FALSE, '', []], TRUE);
 	}
 
 	/**
@@ -97,46 +97,26 @@ class Kohana_Valid {
 		return ($value === $required);
 	}
 
-	/**
-	 * Check an email address for correct format.
-	 *
-	 * @link  http://www.iamcal.com/publish/articles/php/parsing_email/
-	 * @link  http://www.w3.org/Protocols/rfc822/
-	 *
-	 * @param   string  $email  email address
-	 * @param   boolean $strict strict RFC compatibility
-	 * @return  boolean
-	 */
-	public static function email($email, $strict = FALSE)
-	{
-		if (UTF8::strlen($email) > 254)
-		{
-			return FALSE;
-		}
-
-		if ($strict === TRUE)
-		{
-			$qtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]';
-			$dtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]';
-			$atom  = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+';
-			$pair  = '\\x5c[\\x00-\\x7f]';
-
-			$domain_literal = "\\x5b($dtext|$pair)*\\x5d";
-			$quoted_string  = "\\x22($qtext|$pair)*\\x22";
-			$sub_domain     = "($atom|$domain_literal)";
-			$word           = "($atom|$quoted_string)";
-			$domain         = "$sub_domain(\\x2e$sub_domain)*";
-			$local_part     = "$word(\\x2e$word)*";
-
-			$expression     = "/^$local_part\\x40$domain$/D";
-		}
-		else
-		{
-			$expression = '/^[-_a-z0-9\'+*$^&%=~!?{}]++(?:\.[-_a-z0-9\'+*$^&%=~!?{}]+)*+@(?:(?![-.])[-a-z0-9.]+(?<![-.])\.[a-z]{2,6}|\d{1,3}(?:\.\d{1,3}){3})$/iD';
-		}
-
-		return (bool) preg_match($expression, (string) $email);
-	}
+    /**
+     * Validates e-mail address
+     * @link  http://www.iamcal.com/publish/articles/php/parsing_email/
+     * @link  http://www.w3.org/Protocols/rfc822/
+     * 
+     * @param  string  $email   e-mail address
+     * @param  bool    $strict  strict e-mail checking
+     * @return boolean
+     */
+    public static function email($email, $strict = FALSE)
+    {
+        if ($strict)
+        {
+            return filter_var(filter_var($email, FILTER_SANITIZE_STRING), FILTER_VALIDATE_EMAIL) !== FALSE;
+        }
+        else
+        {
+            return filter_var($email, FILTER_VALIDATE_EMAIL) !== FALSE;
+        }
+    }
 
 	/**
 	 * Validate the domain of an email address by checking if the domain has a
@@ -348,7 +328,7 @@ class Kohana_Valid {
 	{
 		if ( ! is_array($lengths))
 		{
-			$lengths = array(7,10,11);
+			$lengths = [7,10,11];
 		}
 
 		// Remove all non-digit characters from the number

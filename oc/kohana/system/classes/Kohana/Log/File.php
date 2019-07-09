@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * File log writer. Writes out messages and stores them in a YYYY/MM directory.
  *
  * @package    Kohana
  * @category   Logging
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Log_File extends Log_Writer {
 
@@ -29,7 +29,7 @@ class Kohana_Log_File extends Log_Writer {
 		if ( ! is_dir($directory) OR ! is_writable($directory))
 		{
 			throw new Kohana_Exception('Directory :dir must be writable',
-				array(':dir' => Debug::path($directory)));
+				[':dir' => Debug::path($directory)]);
 		}
 
 		// Determine the directory path
@@ -78,7 +78,7 @@ class Kohana_Log_File extends Log_Writer {
 		if ( ! file_exists($filename))
 		{
 			// Create the log file
-			file_put_contents($filename, Kohana::FILE_SECURITY.' ?>'.PHP_EOL);
+			file_put_contents($filename, NULL);
 
 			// Allow anyone to write to log files
 			chmod($filename, 0666);

@@ -7,8 +7,8 @@ include_once(Kohana::find_file('tests/cache', 'CacheBasicMethodsTest'));
  * @group      kohana.cache
  * @category   Test
  * @author     Kohana Team
- * @copyright  (c) 2009-2012 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest {
 
@@ -33,17 +33,17 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest {
 			Kohana::$config->load('cache')
 				->set(
 					'file',
-					array(
+					[
 						'driver'             => 'file',
 						'cache_dir'          => APPPATH.'cache',
 						'default_expire'     => 3600,
-						'ignore_on_delete'   => array(
+						'ignore_on_delete'   => [
 							'file_we_want_to_keep.cache',
 							'.gitignore',
 							'.git',
 							'.svn'
-						)
-					)
+						]
+					]
 			    );
 		}
 
@@ -78,20 +78,20 @@ class Kohana_Cache_FileTest extends Kohana_CacheBasicMethodsTest {
 	 */
 	public function provider_utf8()
 	{
-		return array(
-			array(
+		return [
+			[
 				'This is â ütf-8 Ӝ☃ string',
 				'This is â ütf-8 Ӝ☃ string'
-			),
-			array(
+			],
+			[
 				'㆓㆕㆙㆛',
 				'㆓㆕㆙㆛'
-			),
-			array(
+			],
+			[
 				'அஆஇஈஊ',
 				'அஆஇஈஊ'
-			)
-		);
+			]
+		];
 	}
 
 	/**

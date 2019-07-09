@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * Custom Markdown parser for Kohana documentation.
  *
  * @package    Kohana/Userguide
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2013 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
 
@@ -26,12 +26,12 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
 	 *
 	 * @var  array
 	 */
-	protected $_heading_ids = array();
+	protected $_heading_ids = [];
 	
 	/**
-	 * @var  string   the generated table of contents
+	 * @var  array   the generated table of contents
 	 */
-	protected static $_toc = "";
+	protected static $_toc = [];
 	
 	/**
 	 * Slightly less terrible way to make it so the TOC only shows up when we
@@ -169,7 +169,7 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
 	{
 		if (preg_match_all('/{{([^\s{}]++)}}/', $text, $matches, PREG_SET_ORDER))
 		{
-			$replace = array();
+			$replace = [];
 
 			foreach ($matches as $set)
 			{
@@ -262,10 +262,10 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
 	
 	protected function _add_to_toc($level, $name, $id)
 	{
-		self::$_toc[] = array(
+		self::$_toc[] = [
 			'level' => $level,
 			'name'  => $name,
-			'id'    => $id);
+			'id'    => $id];
 	}
 
 	public function doTOC($text)

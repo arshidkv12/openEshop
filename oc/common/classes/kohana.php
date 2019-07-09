@@ -14,6 +14,9 @@ class Kohana extends Kohana_Core {
     public static $_POST_ORIG;
     public static $_GET_ORIG;
     public static $_COOKIE_ORIG;
+    
+    public static $magic_quotes;
+    
 
     /**
      * overrides default init

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Database-based session class.
  *
@@ -15,8 +15,8 @@
  * @package    Kohana/Database
  * @category   Session
  * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Session_Database extends Session {
 
@@ -27,11 +27,11 @@ class Kohana_Session_Database extends Session {
 	protected $_table = 'sessions';
 
 	// Database column names
-	protected $_columns = array(
+	protected $_columns = [
 		'session_id'  => 'session_id',
 		'last_active' => 'last_active',
 		'contents'    => 'contents'
-	);
+	];
 
 	// Garbage collection requests
 	protected $_gc = 500;
@@ -90,7 +90,7 @@ class Kohana_Session_Database extends Session {
 	{
 		if ($id OR $id = Cookie::get($this->_name))
 		{
-			$result = DB::select(array($this->_columns['contents'], 'contents'))
+			$result = DB::select([$this->_columns['contents'], 'contents'])
 				->from($this->_table)
 				->where($this->_columns['session_id'], '=', ':id')
 				->limit(1)
@@ -141,7 +141,7 @@ class Kohana_Session_Database extends Session {
 		{
 			// Insert a new row
 			$query = DB::insert($this->_table, $this->_columns)
-				->values(array(':new_id', ':active', ':contents'));
+				->values([':new_id', ':active', ':contents']);
 		}
 		else
 		{

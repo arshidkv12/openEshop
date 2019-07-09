@@ -1,13 +1,11 @@
-<?php defined('SYSPATH') OR die('No direct script access.') ?>
-
 <style type="text/css">
 <?php include Kohana::find_file('views', 'profiler/style', 'css') ?>
 </style>
 
 <?php
 $group_stats      = Profiler::group_stats();
-$group_cols       = array('min', 'max', 'average', 'total');
-$application_cols = array('min', 'max', 'average', 'current');
+$group_cols       = ['min', 'max', 'average', 'total'];
+$application_cols = ['min', 'max', 'average', 'current'];
 ?>
 
 <div class="kohana">

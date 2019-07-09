@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Request. Uses the [Route] class to determine what
  * [Controller] to send the request to.
@@ -6,8 +6,8 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Request implements HTTP_Request {
 
@@ -24,7 +24,7 @@ class Kohana_Request implements HTTP_Request {
 	/**
 	 * @var  string  trusted proxy server IPs
 	 */
-	public static $trusted_proxies = array('127.0.0.1', 'localhost', 'localhost.localdomain');
+	public static $trusted_proxies = ['127.0.0.1', 'localhost', 'localhost.localdomain'];
 
 	/**
 	 * @var  Request  main request instance
@@ -54,7 +54,7 @@ class Kohana_Request implements HTTP_Request {
 	 * @uses    Route::all
 	 * @uses    Route::matches
 	 */
-	public static function factory($uri = TRUE, $client_params = array(), $allow_external = TRUE, $injected_routes = array())
+	public static function factory($uri = TRUE, $client_params = [], $allow_external = TRUE, $injected_routes = [])
 	{
 		// If this is the initial request
 		if ( ! Request::$initial)
@@ -99,7 +99,14 @@ class Kohana_Request implements HTTP_Request {
 				$requested_with = $_SERVER['HTTP_X_REQUESTED_WITH'];
 			}
 
-			if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+			if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])
+				AND isset($_SERVER['REMOTE_ADDR'])
+				AND in_array($_SERVER['REMOTE_ADDR'], Request::$trusted_proxies)) {
+
+				// If using CloudFlare, client IP address is sent with this header
+				Request::$client_ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+			}
+			elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
 			    AND isset($_SERVER['REMOTE_ADDR'])
 			    AND in_array($_SERVER['REMOTE_ADDR'], Request::$trusted_proxies))
 			{
@@ -120,7 +127,7 @@ class Kohana_Request implements HTTP_Request {
 				// client is using a proxy server.
 				$client_ips = explode(',', $_SERVER['HTTP_CLIENT_IP']);
 
-				Request::$client_ip = array_shift($client_ips);
+				Request::$client_ip = trim(end($client_ips));
 
 				unset($client_ips);
 			}
@@ -142,7 +149,7 @@ class Kohana_Request implements HTTP_Request {
 				$uri = Request::detect_uri();
 			}
 
-			$cookies = array();
+			$cookies = [];
 
 			if (($cookie_keys = array_keys($_COOKIE)))
 			{
@@ -347,7 +354,7 @@ class Kohana_Request implements HTTP_Request {
 		if ($accepts === NULL)
 		{
 			// Parse the HTTP_ACCEPT header
-			$accepts = Request::_parse_accept($_SERVER['HTTP_ACCEPT'], array('*/*' => 1.0));
+			$accepts = Request::_parse_accept($_SERVER['HTTP_ACCEPT'], ['*/*' => 1.0]);
 		}
 
 		if (isset($type))
@@ -460,7 +467,7 @@ class Kohana_Request implements HTTP_Request {
 		$routes = (empty($routes)) ? Route::all() : $routes;
 		$params = NULL;
 
-		foreach ($routes as $name => $route)
+		foreach ($routes as $route)
 		{
 			// Use external routes for reverse routing only
 			if ($route->is_external())
@@ -471,10 +478,10 @@ class Kohana_Request implements HTTP_Request {
 			// We found something suitable
 			if ($params = $route->matches($request))
 			{
-				return array(
+				return [
 					'params' => $params,
 					'route' => $route,
-				);
+				];
 			}
 		}
 
@@ -613,22 +620,22 @@ class Kohana_Request implements HTTP_Request {
 	/**
 	 * @var  array   parameters from the route
 	 */
-	protected $_params = array();
+	protected $_params = [];
 
 	/**
 	 * @var array    query parameters
 	 */
-	protected $_get = array();
+	protected $_get = [];
 
 	/**
 	 * @var array    post parameters
 	 */
-	protected $_post = array();
+	protected $_post = [];
 
 	/**
 	 * @var array    cookies to send with the request
 	 */
-	protected $_cookies = array();
+	protected $_cookies = [];
 
 	/**
 	 * @var Kohana_Request_Client
@@ -653,12 +660,12 @@ class Kohana_Request implements HTTP_Request {
 	 * @uses    Route::all
 	 * @uses    Route::matches
 	 */
-	public function __construct($uri, $client_params = array(), $allow_external = TRUE, $injected_routes = array())
+	public function __construct($uri, $client_params = [], $allow_external = TRUE, $injected_routes = [])
 	{
-		$client_params = is_array($client_params) ? $client_params : array();
+		$client_params = is_array($client_params) ? $client_params : [];
 
 		// Initialise the header
-		$this->_header = new HTTP_Header(array());
+		$this->_header = new HTTP_Header([]);
 
 		// Assign injected routes
 		$this->_routes = $injected_routes;
@@ -675,7 +682,7 @@ class Kohana_Request implements HTTP_Request {
 		// Detect protocol (if present)
 		// $allow_external = FALSE prevents the default index.php from
 		// being able to proxy external pages.
-		if ( ! $allow_external OR strpos($uri, '://') === FALSE)
+		if ( ! $allow_external OR (strpos($uri, '://') === FALSE AND strncmp($uri, '//', 2)))
 		{
 			// Remove leading and trailing slashes from the URI
 			$this->_uri = trim($uri, '/');
@@ -977,17 +984,17 @@ class Kohana_Request implements HTTP_Request {
 
 		if ( ! $this->_route instanceof Route)
 		{
-			return HTTP_Exception::factory(404, 'Unable to find a route to match the URI: :uri', array(
+			return HTTP_Exception::factory(404, 'Unable to find a route to match the URI: :uri', [
 				':uri' => $this->_uri,
-			))->request($this)
+			])->request($this)
 				->get_response();
 		}
 
 		if ( ! $this->_client instanceof Request_Client)
 		{
-			throw new Request_Exception('Unable to execute :uri without a Kohana_Request_Client', array(
+			throw new Request_Exception('Unable to execute :uri without a Kohana_Request_Client', [
 				':uri' => $this->_uri,
-			));
+			]);
 		}
 
 		return $this->_client->execute($this);
@@ -1243,7 +1250,7 @@ class Kohana_Request implements HTTP_Request {
 		// Prepare cookies
 		if ($this->_cookies)
 		{
-			$cookie_string = array();
+			$cookie_string = [];
 
 			// Parse each
 			foreach ($this->_cookies as $key => $value)

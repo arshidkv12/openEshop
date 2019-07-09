@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * [Request_Client_External] Stream driver performs external requests using php
  * sockets. To use this driver, ensure the following is completed
@@ -12,8 +12,8 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  * @uses       [PHP Streams](http://php.net/manual/en/book.stream.php)
  */
 class Kohana_Request_Client_Stream extends Request_Client_External {
@@ -52,13 +52,13 @@ class Kohana_Request_Client_Stream extends Request_Client_External {
 		list($protocol) = explode('/', $request->protocol());
 
 		// Create the context
-		$options = array(
-			strtolower($protocol) => array(
+		$options = [
+			strtolower($protocol) => [
 				'method'     => $request->method(),
 				'header'     => (string) $request->headers(),
 				'content'    => $body
-			)
-		);
+			]
+		];
 
 		// Create the context stream
 		$context = stream_context_create($options);
@@ -94,7 +94,7 @@ class Kohana_Request_Client_Stream extends Request_Client_External {
 		$response_header = $response->headers();
 
 		// Process headers
-		array_map(array($response_header, 'parse_header_string'), array(), $meta_data['wrapper_data']);
+		array_map([$response_header, 'parse_header_string'], [], $meta_data['wrapper_data']);
 
 		$response->status($status)
 			->protocol($protocol)

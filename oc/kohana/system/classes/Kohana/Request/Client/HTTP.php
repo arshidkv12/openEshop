@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * [Request_Client_External] HTTP driver performs external requests using the
  * php-http extension. To use this driver, ensure the following is completed
@@ -12,8 +12,8 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  * @uses       [PECL HTTP](http://php.net/manual/en/book.http.php)
  */
 class Kohana_Request_Client_HTTP extends Request_Client_External {
@@ -25,7 +25,7 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 	 * @param   array    $params Params
 	 * @throws  Request_Exception
 	 */
-	public function __construct(array $params = array())
+	public function __construct(array $params = [])
 	{
 		// Check that PECL HTTP supports requests
 		if ( ! http_support(HTTP_SUPPORT_REQUESTS))
@@ -41,7 +41,7 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 	 * @var     array     curl options
 	 * @link    http://www.php.net/manual/function.curl-setopt
 	 */
-	protected $_options = array();
+	protected $_options = [];
 
 	/**
 	 * Sends the HTTP message [Request] to a remote server and processes
@@ -53,7 +53,7 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 	 */
 	public function _send_message(Request $request, Response $response)
 	{
-		$http_method_mapping = array(
+		$http_method_mapping = [
 			HTTP_Request::GET     => HTTPRequest::METH_GET,
 			HTTP_Request::HEAD    => HTTPRequest::METH_HEAD,
 			HTTP_Request::POST    => HTTPRequest::METH_POST,
@@ -62,7 +62,7 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 			HTTP_Request::OPTIONS => HTTPRequest::METH_OPTIONS,
 			HTTP_Request::TRACE   => HTTPRequest::METH_TRACE,
 			HTTP_Request::CONNECT => HTTPRequest::METH_CONNECT,
-		);
+		];
 
 		// Create an http request object
 		$http_request = new HTTPRequest($request->uri(), $http_method_mapping[$request->method()]);

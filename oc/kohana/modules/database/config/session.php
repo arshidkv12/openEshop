@@ -1,7 +1,7 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
-return array(
-	'database' => array(
+return [
+	'database' => [
 		/**
 		 * Database settings for session storage.
 		 *
@@ -13,7 +13,7 @@ return array(
 		'group'   => 'default',
 		'table'   => 'sessions',
 		'gc'      => 500,
-		'columns' => array(
+		'columns' => [
 			/**
 			 * session_id:  session identifier
 			 * last_active: timestamp of the last activity
@@ -22,6 +22,6 @@ return array(
 			'session_id'  => 'session_id',
 			'last_active' => 'last_active',
 			'contents'    => 'contents'
-		),
-	),
-);
+		],
+	],
+];

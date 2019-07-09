@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php
 /**
  * @package    Kohana/Codebench
  * @category   Tests
@@ -11,13 +11,12 @@ class Bench_AutoLinkEmails extends Codebench {
 
 	public $loops = 1000;
 
-	public $subjects = array
-	(
+	public $subjects = [
 		'<ul>
 		    <li>voorzitter@xxxx.com</li>
 		    <li>vicevoorzitter@xxxx.com</li>
 		</ul>',
-	);
+	];
 
 	// The original function, with str_replace replaced by preg_replace. Looks clean.
 	public function bench_match_all_loop($subject)
@@ -48,7 +47,7 @@ class Bench_AutoLinkEmails extends Codebench {
 	{
 		return preg_replace_callback(
 			'~\b(?<!href="mailto:|">|58;)(?!\.)[-+_a-z0-9.]++(?<!\.)@(?![-.])[-a-z0-9.]+(?<!\.)\.[a-z]{2,6}\b~i',
-			array($this, '_callback_external'),
+			[$this, '_callback_external'],
 			$subject
 		);
 	}
@@ -62,7 +61,10 @@ class Bench_AutoLinkEmails extends Codebench {
 	{
 		return preg_replace_callback(
 			'~\b(?<!href="mailto:|">|58;)(?!\.)[-+_a-z0-9.]++(?<!\.)@(?![-.])[-a-z0-9.]+(?<!\.)\.[a-z]{2,6}\b~i',
-			create_function('$matches', 'return HTML::mailto($matches[0]);'), // Yuck!
+			function($matches)
+			{
+				return HTML::mailto($matches[0]);
+			}, // Yuck!
 			$subject
 		);
 	}

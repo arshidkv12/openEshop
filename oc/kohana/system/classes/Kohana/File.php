@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * File helper class.
  *
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_File {
 
@@ -90,18 +90,18 @@ class Kohana_File {
 		// Load all of the mime types
 		$mimes = Kohana::$config->load('mimes');
 
-		return isset($mimes[$extension]) ? ( (array) $mimes[$extension]) : array();
+		return isset($mimes[$extension]) ? ( (array) $mimes[$extension]) : [];
 	}
 
 	/**
 	 * Lookup file extensions by MIME type
 	 *
 	 * @param   string  $type File MIME type
-	 * @return  array   File extensions matching MIME type
+	 * @return  array|false   File extensions matching MIME type or false if none
 	 */
 	public static function exts_by_mime($type)
 	{
-		static $types = array();
+		static $types = [];
 
 		// Fill the static array
 		if (empty($types))
@@ -118,7 +118,7 @@ class Kohana_File {
 
 					if ( ! isset($types[$mime]))
 					{
-						$types[$mime] = array( (string) $ext);
+						$types[$mime] = [ (string) $ext];
 					}
 					elseif ( ! in_array($ext, $types[$mime]))
 					{
@@ -135,11 +135,18 @@ class Kohana_File {
 	 * Lookup a single file extension by MIME type.
 	 *
 	 * @param   string  $type  MIME type to lookup
-	 * @return  mixed          First file extension matching or false
+	 * @return  string|false   First file extension matching or false
 	 */
 	public static function ext_by_mime($type)
 	{
-		return current(File::exts_by_mime($type));
+		$exts = File::exts_by_mime($type);
+
+		if ($exts === FALSE)
+		{
+			return FALSE;
+		}
+
+		return current($exts);
 	}
 
 	/**

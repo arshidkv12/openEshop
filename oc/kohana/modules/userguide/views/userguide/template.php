@@ -3,23 +3,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title><?php echo $title ?> | Kohana <?php echo 'User Guide'; ?></title>
+<title><?php echo $title ?> | Koseven <?php echo 'User Guide'; ?></title>
 
-<?php foreach ($styles as $style => $media) echo HTML::style($style, array('media' => $media), NULL, TRUE), "\n" ?>
+<?php foreach ($styles as $style => $media) echo HTML::style($style, ['media' => $media], NULL, TRUE), "\n" ?>
 
 <?php foreach ($scripts as $script) echo HTML::script($script, NULL, NULL, TRUE), "\n" ?>
 
-<!--[if lt IE 9]>
-<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
-<![endif]-->
 </head>
 <body>
 
 	<div id="kodoc-header">
 		<div class="container">
-			<a href="http://kohanaframework.org/" id="kodoc-logo">
-				<img src="<?php echo Route::url('docs/media', array('file' => 'img/kohana.png')) ?>" />
-			</a>
+			<a id="kodoc-logo" href="https://koseven.ga/">koseven</a>
 			<div id="kodoc-menu">
 				<ul>
 					<li class="guide first">
@@ -87,7 +82,7 @@
 			<?php endif ?>
 			</div>
 			<div class="span-12 last right">
-			<p>Powered by <?php echo HTML::anchor('http://kohanaframework.org/', 'Kohana') ?> v<?php echo Kohana::VERSION ?></p>
+			<p>Powered by <?php echo HTML::anchor('https://koseven.ga/', 'Koseven') ?> v<?php echo Kohana::VERSION ?></p>
 			</div>
 		</div>
 	</div>

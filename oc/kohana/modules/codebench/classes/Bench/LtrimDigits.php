@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php
 /**
  * @package    Kohana/Codebench
  * @category   Tests
@@ -10,11 +10,10 @@ class Bench_LtrimDigits extends Codebench {
 
 	public $loops = 100000;
 
-	public $subjects = array
-	(
+	public $subjects = [
 		'123digits',
 		'no-digits',
-	);
+	];
 
 	public function bench_regex($subject)
 	{

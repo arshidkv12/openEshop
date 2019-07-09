@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Log writer abstract class. All [Log] writers must extend this class.
  *
  * @package    Kohana
  * @category   Logging
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 abstract class Kohana_Log_Writer {
 
@@ -28,7 +28,7 @@ abstract class Kohana_Log_Writer {
 	 * Numeric log level to string lookup table.
 	 * @var array
 	 */
-	protected $_log_levels = array(
+	protected $_log_levels = [
 		LOG_EMERG   => 'EMERGENCY',
 		LOG_ALERT   => 'ALERT',
 		LOG_CRIT    => 'CRITICAL',
@@ -37,7 +37,7 @@ abstract class Kohana_Log_Writer {
 		LOG_NOTICE  => 'NOTICE',
 		LOG_INFO    => 'INFO',
 		LOG_DEBUG   => 'DEBUG',
-	);
+	];
 
 	/**
 	 * @var  int  Level to use for stack traces

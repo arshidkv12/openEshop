@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
 /**
  * Database writer for the config system
@@ -15,12 +15,12 @@
  * @package    Kohana
  * @category   Configuration
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Config_Database_Writer extends Config_Database_Reader implements Kohana_Config_Writer
 {
-	protected $_loaded_keys = array();
+	protected $_loaded_keys = [];
 
 	/**
 	 * Tries to load the specificed configuration group
@@ -91,8 +91,8 @@ class Kohana_Config_Database_Writer extends Config_Database_Reader implements Ko
 	 */
 	protected function _insert($group, $key, $config)
 	{
-		DB::insert($this->_table_name, array('group_name', 'config_key', 'config_value'))
-			->values(array($group, $key, $config))
+		DB::insert($this->_table_name, ['group_name', 'config_key', 'config_value'])
+			->values([$group, $key, $config])
 			->execute($this->_db_instance);
 
 		return $this;
@@ -109,7 +109,7 @@ class Kohana_Config_Database_Writer extends Config_Database_Reader implements Ko
 	protected function _update($group, $key, $config)
 	{
 		DB::update($this->_table_name)
-			->set(array('config_value' => $config))
+			->set(['config_value' => $config])
 			->where('group_name', '=', $group)
 			->where('config_key', '=', $key)
 			->execute($this->_db_instance);

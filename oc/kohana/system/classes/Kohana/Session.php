@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Base session class.
  *
  * @package    Kohana
  * @category   Session
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 abstract class Kohana_Session {
 
@@ -18,7 +18,7 @@ abstract class Kohana_Session {
 	/**
 	 * @var  array  session instances
 	 */
-	public static $instances = array();
+	public static $instances = [];
 
 	/**
 	 * Creates a singleton session of the given type. Some session types
@@ -54,7 +54,7 @@ abstract class Kohana_Session {
 			Session::$instances[$type] = $session = new $class($config, $id);
 
 			// Write the session at shutdown
-			register_shutdown_function(array($session, 'write'));
+			register_shutdown_function([$session, 'write']);
 		}
 
 		return Session::$instances[$type];
@@ -78,7 +78,7 @@ abstract class Kohana_Session {
 	/**
 	 * @var  array  session data
 	 */
-	protected $_data = array();
+	protected $_data = [];
 
 	/**
 	 * @var  bool  session destroyed?
@@ -394,7 +394,7 @@ abstract class Kohana_Session {
 			if ($this->_destroyed = $this->_destroy())
 			{
 				// The session has been destroyed, clear all data
-				$this->_data = array();
+				$this->_data = [];
 			}
 		}
 

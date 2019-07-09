@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('Kohana bootstrap needs to be included before tests run');
+<?php
 
 /**
  * Tests Kohana i18n class
@@ -11,8 +11,8 @@
  * @category   Tests
  * @author     Kohana Team
  * @author     Jeremy Bush <contractfrombelow@gmail.com>
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_I18nTest extends Unittest_TestCase {
 
@@ -21,9 +21,9 @@ class Kohana_I18nTest extends Unittest_TestCase {
 	 * @var array
 	 */
 	// @codingStandardsIgnoreStart
-	protected $environmentDefault =	array(
+	protected $environmentDefault =	[
 		'I18n::$lang' => 'en-us',
-	);
+	];
 	// @codingStandardsIgnoreEnd
 
 	/**
@@ -33,11 +33,11 @@ class Kohana_I18nTest extends Unittest_TestCase {
 	 */
 	public function provider_lang()
 	{
-		return array(
+		return [
 			// $input, $expected_result
-			array(NULL, 'en-us'),
-			array('es-es', 'es-es'),
-		);
+			[NULL, 'en-us'],
+			['es-es', 'es-es'],
+		];
 	}
 
 	/**
@@ -61,12 +61,12 @@ class Kohana_I18nTest extends Unittest_TestCase {
 	 */
 	public function provider_get()
 	{
-		return array(
+		return [
 			// $value, $result
-			array('en-us', 'Hello, world!', 'Hello, world!'),
-			array('es-es', 'Hello, world!', '¡Hola, mundo!'),
-			array('fr-fr', 'Hello, world!', 'Bonjour, monde!'),
-		);
+			['en-us', 'Hello, world!', 'Hello, world!'],
+			['es-es', 'Hello, world!', '¡Hola, mundo!'],
+			['fr-fr', 'Hello, world!', 'Bonjour, monde!'],
+		];
 	}
 
 	/**

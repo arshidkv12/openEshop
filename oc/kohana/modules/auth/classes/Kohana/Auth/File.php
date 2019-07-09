@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 /**
  * File Auth driver.
  * [!!] this Auth driver does not support roles nor autologin.
  *
  * @package    Kohana/Auth
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Auth_File extends Auth {
 
@@ -16,12 +16,12 @@ class Kohana_Auth_File extends Auth {
 	/**
 	 * Constructor loads the user list into the class.
 	 */
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		parent::__construct($config);
 
 		// Load user list
-		$this->_users = Arr::get($config, 'users', array());
+		$this->_users = Arr::get($config, 'users', []);
 	}
 
 	/**
@@ -34,6 +34,11 @@ class Kohana_Auth_File extends Auth {
 	 */
 	protected function _login($username, $password, $remember)
 	{
+		if ($remember)
+		{
+			throw new Kohana_Exception('File based auth does not support remember');
+		}
+
 		if (is_string($password))
 		{
 			// Create a hashed password
@@ -84,11 +89,9 @@ class Kohana_Auth_File extends Auth {
 		$username = $this->get_user();
 
 		if ($username === FALSE)
-		{
 			return FALSE;
-		}
 
 		return ($password === $this->password($username));
 	}
 
-} // End Auth File
+}

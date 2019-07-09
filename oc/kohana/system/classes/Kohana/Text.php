@@ -1,19 +1,19 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Text helper class. Provides simple methods for working with text.
  *
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Text {
 
 	/**
 	 * @var  array   number units and text equivalents
 	 */
-	public static $units = array(
+	public static $units = [
 		1000000000 => 'billion',
 		1000000    => 'million',
 		1000       => 'thousand',
@@ -45,7 +45,7 @@ class Kohana_Text {
 		3  => 'three',
 		2  => 'two',
 		1  => 'one',
-	);
+	];
 
 	/**
 	 * Limits a phrase to a given number of words.
@@ -426,7 +426,7 @@ class Kohana_Text {
 			return '';
 
 		// Standardize newlines
-		$str = str_replace(array("\r\n", "\r"), "\n", $str);
+		$str = str_replace(["\r\n", "\r"], "\n", $str);
 
 		// Trim whitespace on each line
 		$str = preg_replace('~^[ \t]+~m', '', $str);
@@ -485,13 +485,13 @@ class Kohana_Text {
 		// IEC prefixes (binary)
 		if ($si == FALSE OR strpos($force_unit, 'i') !== FALSE)
 		{
-			$units = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
+			$units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'];
 			$mod   = 1024;
 		}
 		// SI prefixes (decimal)
 		else
 		{
-			$units = array('B', 'kB', 'MB', 'GB', 'TB', 'PB');
+			$units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
 			$mod   = 1000;
 		}
 
@@ -523,7 +523,7 @@ class Kohana_Text {
 		$number = (int) $number;
 
 		// Uncompiled text version
-		$text = array();
+		$text = [];
 
 		// Last matched unit within the loop
 		$last_unit = NULL;
@@ -633,7 +633,7 @@ class Kohana_Text {
 	{
 		if (is_array($value))
 		{
-			$data = array();
+			$data = [];
 			foreach ($value as $part)
 			{
 				// Add each part to the set
@@ -646,7 +646,7 @@ class Kohana_Text {
 		if ($value === 'browser' OR $value == 'version')
 		{
 			// Extra data will be captured
-			$info = array();
+			$info = [];
 
 			// Load browsers
 			$browsers = Kohana::$config->load('user_agents')->browser;

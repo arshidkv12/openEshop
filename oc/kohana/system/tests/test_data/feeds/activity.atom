@@ -1,4 +1,4 @@
-<?phpxml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Kohana v3.x: Activity</title>
   <link href="http://dev.kohanaframework.org/projects/kohana3/activity.atom" rel="self"/>

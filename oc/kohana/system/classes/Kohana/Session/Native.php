@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Native PHP session class.
  *
  * @package    Kohana
  * @category   Session
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Session_Native extends Session {
 
@@ -63,7 +63,12 @@ class Kohana_Session_Native extends Session {
 		}
 
 		// Start the session
-		session_start();
+        try {
+            session_start();
+        } catch(Exception $e) {
+            $this->_destroy();
+            session_start();
+        } 
 
 		// Use the $_SESSION global for storing data
 		$this->_data =& $_SESSION;

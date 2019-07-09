@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Request Client for internal execution
  *
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  * @since      3.1.0
  */
 class Kohana_Request_Client_Internal extends Request_Client {
@@ -42,7 +42,7 @@ class Kohana_Request_Client_Internal extends Request_Client {
 		if ($directory)
 		{
 			// Add the directory name to the class prefix
-			$prefix .= str_replace(array('\\', '/'), '_', trim($directory, '/')).'_';
+			$prefix .= str_replace(['\\', '/'], '_', trim($directory, '/')).'_';
 		}
 
 		if (Kohana::$profiling)
@@ -66,16 +66,13 @@ class Kohana_Request_Client_Internal extends Request_Client {
 		// Change the current request to this request
 		Request::$current = $request;
 
-		// Is this the initial request
-		$initial_request = ($request === Request::$initial);
-
 		try
 		{
 			if ( ! class_exists($prefix.$controller))
 			{
 				throw HTTP_Exception::factory(404,
 					'The requested URL :uri was not found on this server.',
-					array(':uri' => $request->uri())
+					[':uri' => $request->uri()]
 				)->request($request);
 			}
 
@@ -86,7 +83,7 @@ class Kohana_Request_Client_Internal extends Request_Client {
 			{
 				throw new Kohana_Exception(
 					'Cannot create instances of abstract :controller',
-					array(':controller' => $prefix.$controller)
+					[':controller' => $prefix.$controller]
 				);
 			}
 

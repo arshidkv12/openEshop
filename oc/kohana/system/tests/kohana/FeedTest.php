@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('Kohana bootstrap needs to be included before tests run');
+<?php
 
 /**
  * Test for feed helper
@@ -11,8 +11,8 @@
  * @category   Tests
  * @author     Kohana Team
  * @author     Jeremy Bush <contractfrombelow@gmail.com>
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_FeedTest extends Unittest_TestCase
 {
@@ -25,7 +25,7 @@ class Kohana_FeedTest extends Unittest_TestCase
 	// @codingStandardsIgnoreEnd
 	{
 		parent::setUp();
-		Kohana::$config->load('url')->set('trusted_hosts', array('localhost'));
+		Kohana::$config->load('url')->set('trusted_hosts', ['localhost']);
 	}
 
 	/**
@@ -35,11 +35,11 @@ class Kohana_FeedTest extends Unittest_TestCase
 	 */
 	public function provider_parse()
 	{
-		return array(
+		return [
 			// $source, $expected
-			array(realpath(__DIR__.'/../test_data/feeds/activity.atom'), array('Proposals (Political/Workflow) #4839 (New)', 'Proposals (Political/Workflow) #4782')),
-			array(realpath(__DIR__.'/../test_data/feeds/example.rss20'), array('Example entry')),
-		);
+			[realpath(__DIR__.'/../test_data/feeds/activity.atom'), ['Proposals (Political/Workflow) #4839 (New)', 'Proposals (Political/Workflow) #4782']],
+			[realpath(__DIR__.'/../test_data/feeds/example.rss20'), ['Example entry']],
+		];
 	}
 
 	/**
@@ -53,7 +53,7 @@ class Kohana_FeedTest extends Unittest_TestCase
 	 */
 	public function test_parse($source, $expected_titles)
 	{
-		$titles = array();
+		$titles = [];
 		foreach (Feed::parse($source) as $item)
 		{
 			$titles[] = $item['title'];
@@ -69,28 +69,28 @@ class Kohana_FeedTest extends Unittest_TestCase
 	 */
 	public function provider_create()
 	{
-		$info = array('pubDate' => 123, 'image' => array('link' => 'http://kohanaframework.org/image.png', 'url' => 'http://kohanaframework.org/', 'title' => 'title'));
+		$info = ['pubDate' => 123, 'image' => ['link' => 'http://kohanaframework.org/image.png', 'url' => 'http://kohanaframework.org/', 'title' => 'title']];
 
-		return array(
+		return [
 			// $source, $expected
-			array($info, array('foo' => array('foo' => 'bar', 'pubDate' => 123, 'link' => 'foo')), array('_SERVER' => array('HTTP_HOST' => 'localhost')+$_SERVER),
-				array(
+			[$info, ['foo' => ['foo' => 'bar', 'pubDate' => 123, 'link' => 'foo']], ['_SERVER' => ['HTTP_HOST' => 'localhost']+$_SERVER],
+				[
 					'tag' => 'channel',
-					'descendant' => array(
+					'descendant' => [
 						'tag' => 'item',
-						'child' => array(
+						'child' => [
 							'tag' => 'foo',
 							'content' => 'bar'
-						)
-					)
-				),
-				array(
+						]
+					]
+				],
+				[
 					$this->matcher_composer($info, 'image', 'link'),
 					$this->matcher_composer($info, 'image', 'url'),
 					$this->matcher_composer($info, 'image', 'title')
-				)
-			),
-		);
+				]
+			],
+		];
 	}
 
 	/**
@@ -103,16 +103,16 @@ class Kohana_FeedTest extends Unittest_TestCase
 	 */
 	private function matcher_composer($data, $tag, $child)
 	{
-		return array(
+		return [
 			'tag' => 'channel',
-			'descendant' => array(
+			'descendant' => [
 				'tag' => $tag,
-				'child' => array(
+				'child' => [
 					'tag' => $child,
 					'content' => $data[$tag][$child]
-				)
-			)
-		);
+				]
+			]
+		];
 	}
 
 	/**

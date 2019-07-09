@@ -1,17 +1,44 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
 // -- Environment setup --------------------------------------------------------
 
 // Load the core Kohana class
 require SYSPATH.'classes/Kohana/Core'.EXT;
-require COMMONPATH.'classes/kohana'.EXT;
+
+if (is_file(APPPATH.'classes/Kohana'.EXT))
+{
+	// Application extends the core
+	require APPPATH.'classes/Kohana'.EXT;
+}
+else
+{
+	// Load empty core extension
+	require SYSPATH.'classes/Kohana'.EXT;
+}
+
+/**
+ * Set the default time zone.
+ *
+ * @link http://kohanaframework.org/guide/using.configuration
+ * @link http://www.php.net/manual/timezones
+ */
+date_default_timezone_set('America/Chicago');
+
+/**
+ * Set the default locale.
+ *
+ * @link http://kohanaframework.org/guide/using.configuration
+ * @link http://www.php.net/manual/function.setlocale
+ */
+setlocale(LC_ALL, 'en_US.utf-8');
+
 /**
  * Enable the Kohana auto-loader.
  *
- * @see  http://kohanaframework.org/guide/using.autoloading
- * @see  http://php.net/spl_autoload_register
+ * @link http://kohanaframework.org/guide/using.autoloading
+ * @link http://www.php.net/manual/function.spl-autoload-register
  */
-//spl_autoload_register(array('Kohana', 'auto_load'));
+spl_autoload_register(['Kohana', 'auto_load']);
 
 /**
  * Optionally, you can enable a compatibility auto-loader for use with
@@ -19,32 +46,50 @@ require COMMONPATH.'classes/kohana'.EXT;
  *
  * It is recommended to not enable this unless absolutely necessary.
  */
-spl_autoload_register(array('Kohana', 'auto_load_lowercase'));
+//spl_autoload_register(array('Kohana', 'auto_load_lowercase'));
 
 /**
  * Enable the Kohana auto-loader for unserialization.
  *
- * @see  http://php.net/spl_autoload_call
- * @see  http://php.net/manual/var.configuration.php#unserialize-callback-func
+ * @link http://www.php.net/manual/function.spl-autoload-call
+ * @link http://www.php.net/manual/var.configuration#unserialize-callback-func
  */
 ini_set('unserialize_callback_func', 'spl_autoload_call');
 
-// -- To debug enable DEVELOPMENT environment by changing your localhost
-if (!isset($_SERVER['SERVER_NAME']))
-    Kohana::$environment = Kohana::STAGING;
-elseif (OC_DEBUG OR $_SERVER['SERVER_NAME'] == 'eshop.lo')
-    Kohana::$environment =  Kohana::DEVELOPMENT;
-else
-	Kohana::$environment = Kohana::PRODUCTION;
-
+/**
+ * Enable composer autoload libraries
+ */
+if (is_file(DOCROOT.'/vendor/autoload.php'))
+{
+	require DOCROOT.'/vendor/autoload.php';
+}
 
 /**
- * Magic quotes enabled?
+ * Set the mb_substitute_character to "none"
+ *
+ * @link http://www.php.net/manual/function.mb-substitute-character.php
  */
-if (function_exists('get_magic_quotes_gpc'))
+mb_substitute_character('none');
+
+// -- Configuration and initialization -----------------------------------------
+
+
+
+if (isset($_SERVER['SERVER_PROTOCOL']))
 {
-    if (get_magic_quotes_gpc())
-        Kohana::$magic_quotes = TRUE;
+	// Replace the default protocol.
+	HTTP::$protocol = $_SERVER['SERVER_PROTOCOL'];
+}
+
+/**
+ * Set Kohana::$environment if a 'KOHANA_ENV' environment variable has been supplied.
+ *
+ * Note: If you supply an invalid environment name, a PHP warning will be thrown
+ * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
+ */
+if (isset($_SERVER['KOHANA_ENV']))
+{
+	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['KOHANA_ENV']));
 }
 
 /**
@@ -53,50 +98,36 @@ if (function_exists('get_magic_quotes_gpc'))
  * The following options are available:
  *
  * - string   base_url    path, and optionally domain, of your application   NULL
- * - string   index_file  name of your index file, usually "index.php"       index.php
+ * - string   index_file  name of your index file, usually "index.php", if set to FALSE uses clean URLS     index.php
  * - string   charset     internal character set used for input and output   utf-8
  * - string   cache_dir   set the internal cache directory                   APPPATH/cache
+ * - integer  cache_life  lifetime, in seconds, of items cached              60
  * - boolean  errors      enable or disable error handling                   TRUE
  * - boolean  profile     enable or disable internal profiling               TRUE
  * - boolean  caching     enable or disable internal caching                 FALSE
+ * - boolean  expose      set the X-Powered-By header                        FALSE
  */
-Kohana::init(array(
-    'base_url'  => '/',//later we change it taking it from the config
-    'errors'    => TRUE,
-    'profile'   => (Kohana::$environment == Kohana::DEVELOPMENT),
-    'caching'   => (Kohana::$environment == Kohana::PRODUCTION),
-));
+Kohana::init([
+	'base_url'   => '/',
+]);
 
 /**
  * Attach the file write to logging. Multiple writers are supported.
  */
-//Kohana::$log->attach(new Log_File(APPPATH.'logs'));
-if ((Kohana::$environment !== Kohana::DEVELOPMENT) AND (Kohana::$environment !== Kohana::STAGING))
-{
-    //$LEVELS = array();
-    $LEVELS = array(LOG_ERR);
-}
-else
-{
-    $LEVELS = array(LOG_INFO,LOG_ERR,LOG_DEBUG);
-}
-/**
- * Attach the file write to logging. Multiple writers are supported.
- */
-Kohana::$log->attach(new Log_File(APPPATH.'logs'),$LEVELS);
+Kohana::$log->attach(new Log_File(APPPATH.'logs'));
 
 /**
  * Attach a file reader to config. Multiple readers are supported.
  */
 Kohana::$config->attach(new Config_File);
 
-
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
-$modules = array(
-    'themes'        => DOCROOT.'themes',     // loaded as a module so we can search file using kohana find_file
+Kohana::modules([
+	'themes'        => DOCROOT.'themes',     // loaded as a module so we can search file using kohana find_file
     //KO Modules
+    'encrypt'       => KOMODPATH.'encrypt',    // Encryption supprt
     'auth'          => KOMODPATH.'auth',       // Basic authentication
     'cache'         => KOMODPATH.'cache',      // Caching with multiple backends
     'database'      => KOMODPATH.'database',   // Database access
@@ -110,19 +141,34 @@ $modules = array(
     'widgets'       => COMMONPATH.'modules/widgets',    // loads default widgets
     'cron'          => COMMONPATH.'modules/cron',    // cron module
     'geoip3'        => MODPATH.'geoip3',    // maxmind geoip
-    'imagefly'      => COMMONPATH.'modules/imagefly',//imagefly resize image files on the fly ;)
-);
+    'imagefly'      => COMMONPATH.'modules/imagefly'
+	]);
 
-//modules for development environment, not included in distribution KO with OC, so you need to place them in your environment
-//also we did a cleaning in KO removing all the tests and documentation to make it lighter
-// if (Kohana::$environment == Kohana::DEVELOPMENT)
-// {
-//     $modules['unittest'] =  MODPATH.'unittest';   // Unit testing
-//     //$modules['userguide'] = MODPATH.'userguide';  // User guide and API documentation
-// }
+/**
+ * Cookie Salt
+ * @see  http://kohanaframework.org/3.3/guide/kohana/cookies
+ *
+ * If you have not defined a cookie salt in your Cookie class then
+ * uncomment the line below and define a preferrably long salt.
+ */
+  Cookie::$salt = 'A70601E786D3D4B3254414CE28C41532';
+/**
+ * Cookie HttpOnly directive
+ * If set to true, disallows cookies to be accessed from JavaScript
+ * @see https://en.wikipedia.org/wiki/Session_hijacking
+ */
+// Cookie::$httponly = TRUE;
+/**
+ * If website runs on secure protocol HTTPS, allows cookies only to be transmitted
+ * via HTTPS.
+ * Warning: HSTS must also be enabled in .htaccess, otherwise first request
+ * to http://www.example.com will still reveal this cookie
+ */
+// Cookie::$secure = isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] == 'on' ? TRUE : FALSE;
 
-Kohana::modules($modules);
-unset($modules);
+/**
+ * Set the routes. Each route must have a minimum of a name, a URI and a set of
+ * defaults for the URI.
+ */
 
-// initializing the OC APP, and routes
 Core::initialize();

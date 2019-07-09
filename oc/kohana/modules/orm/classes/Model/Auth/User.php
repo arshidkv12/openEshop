@@ -1,11 +1,11 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 /**
  * Default auth user
  *
  * @package    Kohana/Auth
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Model_Auth_User extends ORM {
 
@@ -14,10 +14,10 @@ class Model_Auth_User extends ORM {
 	 *
 	 * @var array Relationhips
 	 */
-	protected $_has_many = array(
-		'user_tokens' => array('model' => 'User_Token'),
-		'roles'       => array('model' => 'Role', 'through' => 'roles_users'),
-	);
+	protected $_has_many = [
+		'user_tokens' => ['model' => 'User_Token'],
+		'roles'       => ['model' => 'Role', 'through' => 'roles_users'],
+	];
 
 	/**
 	 * Rules for the user model. Because the password is _always_ a hash
@@ -29,21 +29,21 @@ class Model_Auth_User extends ORM {
 	 */
 	public function rules()
 	{
-		return array(
-			'username' => array(
-				array('not_empty'),
-				array('max_length', array(':value', 32)),
-				array(array($this, 'unique'), array('username', ':value')),
-			),
-			'password' => array(
-				array('not_empty'),
-			),
-			'email' => array(
-				array('not_empty'),
-				array('email'),
-				array(array($this, 'unique'), array('email', ':value')),
-			),
-		);
+		return [
+			'username' => [
+				['not_empty'],
+				['max_length', [':value', 32]],
+				[[$this, 'unique'], ['username', ':value']],
+			],
+			'password' => [
+				['not_empty'],
+			],
+			'email' => [
+				['not_empty'],
+				['email'],
+				[[$this, 'unique'], ['email', ':value']],
+			],
+		];
 	}
 
 	/**
@@ -54,11 +54,11 @@ class Model_Auth_User extends ORM {
 	 */
 	public function filters()
 	{
-		return array(
-			'password' => array(
-				array(array(Auth::instance(), 'hash'))
-			)
-		);
+		return [
+			'password' => [
+				[[Auth::instance(), 'hash']]
+			]
+		];
 	}
 
 	/**
@@ -68,11 +68,11 @@ class Model_Auth_User extends ORM {
 	 */
 	public function labels()
 	{
-		return array(
+		return [
 			'username'         => 'username',
 			'email'            => 'email address',
 			'password'         => 'password',
-		);
+		];
 	}
 
 	/**
@@ -110,7 +110,7 @@ class Model_Auth_User extends ORM {
 			$field = $this->unique_key($value);
 		}
 
-		return (bool) DB::select(array(DB::expr('COUNT(*)'), 'total_count'))
+		return (bool) DB::select([DB::expr('COUNT(*)'), 'total_count'])
 			->from($this->_table_name)
 			->where($field, '=', $value)
 			->where($this->_primary_key, '!=', $this->pk())
@@ -138,8 +138,8 @@ class Model_Auth_User extends ORM {
 	public static function get_password_validation($values)
 	{
 		return Validation::factory($values)
-			->rule('password', 'min_length', array(':value', 8))
-			->rule('password_confirm', 'matches', array(':validation', ':field', 'password'));
+			->rule('password', 'min_length', [':value', 8])
+			->rule('password_confirm', 'matches', [':validation', ':field', 'password']);
 	}
 
 	/**

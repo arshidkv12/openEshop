@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Support for image manipulation using [Imagick](http://php.net/Imagick).
  *
  * @package    Kohana/Image
  * @category   Drivers
  * @author     Tamas Mihalik tamas.mihalik@gmail.com
- * @copyright  (c) 2009-2012 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Image_Imagick extends Image {
 
@@ -119,13 +119,9 @@ class Kohana_Image_Imagick extends Image {
 	protected function _do_flip($direction)
 	{
 		if ($direction === Image::HORIZONTAL)
-		{
 			return $this->im->flopImage();
-		}
 		else
-		{
 			return $this->im->flipImage();
-		}
 	}
 
 	protected function _do_sharpen($amount)
@@ -150,7 +146,7 @@ class Kohana_Image_Imagick extends Image {
 		$reflection->setImagePage($this->width, $height, 0, 0);
 
 		// Select the fade direction
-		$direction = array('transparent', 'black');
+		$direction = ['transparent', 'black'];
 
 		if ($fade_in)
 		{
@@ -273,7 +269,7 @@ class Kohana_Image_Imagick extends Image {
 		{
 			// Reset the image type and mime type
 			$this->type = $type;
-			$this->mime = image_type_to_mime_type($type);
+			$this->mime = $this->image_type_to_mime_type($type);
 
 			return TRUE;
 		}
@@ -294,7 +290,7 @@ class Kohana_Image_Imagick extends Image {
 
 		// Reset the image type and mime type
 		$this->type = $type;
-		$this->mime = image_type_to_mime_type($type);
+		$this->mime = $this->image_type_to_mime_type($type);
 
 		return (string) $this->im;
 	}
@@ -324,12 +320,16 @@ class Kohana_Image_Imagick extends Image {
 			case 'png':
 				$type = IMAGETYPE_PNG;
 			break;
+			case 'webp':
+				$type = SELF::IMAGETYPE_WEBP;
+			break;
 			default:
 				throw new Kohana_Exception('Installed ImageMagick does not support :type images',
-					array(':type' => $extension));
+					[':type' => $extension]);
 			break;
 		}
 
-		return array($format, $type);
+		return [$format, $type];
 	}
-} // End Kohana_Image_Imagick
+
+}

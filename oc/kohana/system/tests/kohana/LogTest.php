@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('Kohana bootstrap needs to be included before tests run');
+<?php
 
 /**
  * Tests Kohana Logging API
@@ -11,8 +11,8 @@
  * @category   Tests
  * @author     Kohana Team
  * @author     Matt Button <matthew@sigswitch.com>
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_LogTest extends Unittest_TestCase
 {
@@ -28,7 +28,7 @@ class Kohana_LogTest extends Unittest_TestCase
 	{
 		$logger = new Log;
 
-		$this->assertAttributeSame(array(), '_messages', $logger);
+		$this->assertAttributeSame([], '_messages', $logger);
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Kohana_LogTest extends Unittest_TestCase
 	{
 		$logger = new Log;
 
-		$this->assertAttributeSame(array(), '_writers', $logger);
+		$this->assertAttributeSame([], '_writers', $logger);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Kohana_LogTest extends Unittest_TestCase
 		$this->assertSame($logger, $logger->attach($writer));
 
 		$this->assertAttributeSame(
-			array(spl_object_hash($writer) => array('object' => $writer, 'levels' => array())),
+			[spl_object_hash($writer) => ['object' => $writer, 'levels' => []]],
 			'_writers',
 			$logger
 		);
@@ -83,7 +83,7 @@ class Kohana_LogTest extends Unittest_TestCase
 		$this->assertSame($logger, $logger->attach($writer, Log::NOTICE, Log::CRITICAL));
 
 		$this->assertAttributeSame(
-			array(spl_object_hash($writer) => array('object' => $writer, 'levels' => array(Log::CRITICAL, Log::ERROR, Log::WARNING, Log::NOTICE))),
+			[spl_object_hash($writer) => ['object' => $writer, 'levels' => [Log::CRITICAL, Log::ERROR, Log::WARNING, Log::NOTICE]]],
 			'_writers',
 			$logger
 		);
@@ -104,7 +104,7 @@ class Kohana_LogTest extends Unittest_TestCase
 
 		$this->assertSame($logger, $logger->detach($writer));
 
-		$this->assertAttributeSame(array(), '_writers', $logger);
+		$this->assertAttributeSame([], '_writers', $logger);
 	}
 
 

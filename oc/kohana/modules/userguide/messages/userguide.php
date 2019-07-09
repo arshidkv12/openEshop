@@ -1,7 +1,7 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-return array(
-	'translations' => array(
+return [
+	'translations' => [
 		'de-de' => 'Deutsch',
 		'en-us' => 'English',
 		'es-es' => 'Español',
@@ -10,5 +10,5 @@ return array(
 		'fr-fr' => 'Français',
 		'he-il' => 'עברית',
 		'nl'	=> 'Nederlands',
-	),
-);
+	],
+];

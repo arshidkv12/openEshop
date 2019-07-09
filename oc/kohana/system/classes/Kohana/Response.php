@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Response wrapper. Created as the result of any [Request] execution
  * or utility method (i.e. Redirect). Implements standard HTTP
@@ -7,8 +7,8 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2014 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  * @since      3.1.0
  */
 class Kohana_Response implements HTTP_Response {
@@ -26,16 +26,17 @@ class Kohana_Response implements HTTP_Response {
 	 * @param   array    $config Setup the response object
 	 * @return  Response
 	 */
-	public static function factory(array $config = array())
+	public static function factory(array $config = [])
 	{
 		return new Response($config);
 	}
 
 	// HTTP status codes and messages
-	public static $messages = array(
+	public static $messages = [
 		// Informational 1xx
 		100 => 'Continue',
 		101 => 'Switching Protocols',
+		102 => 'Processing',
 
 		// Success 2xx
 		200 => 'OK',
@@ -45,6 +46,8 @@ class Kohana_Response implements HTTP_Response {
 		204 => 'No Content',
 		205 => 'Reset Content',
 		206 => 'Partial Content',
+		207 => 'Multi-Status',
+		208 => 'Already Reported',
 
 		// Redirection 3xx
 		300 => 'Multiple Choices',
@@ -75,6 +78,10 @@ class Kohana_Response implements HTTP_Response {
 		415 => 'Unsupported Media Type',
 		416 => 'Requested Range Not Satisfiable',
 		417 => 'Expectation Failed',
+		422 => 'Unprocessable Entity',
+		423 => 'Locked',
+		424 => 'Failed Dependency',
+		429 => 'Too Many Requests',
 
 		// Server Error 5xx
 		500 => 'Internal Server Error',
@@ -83,8 +90,10 @@ class Kohana_Response implements HTTP_Response {
 		503 => 'Service Unavailable',
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported',
+		507 => 'Insufficient Storage',
+		508 => 'Loop Detected',
 		509 => 'Bandwidth Limit Exceeded'
-	);
+	];
 
 	/**
 	 * @var  integer     The response http status
@@ -104,7 +113,7 @@ class Kohana_Response implements HTTP_Response {
 	/**
 	 * @var  array       Cookies to be returned in the response
 	 */
-	protected $_cookies = array();
+	protected $_cookies = [];
 
 	/**
 	 * @var  string      The response protocol
@@ -117,7 +126,7 @@ class Kohana_Response implements HTTP_Response {
 	 * @param   array $config Setup the response object
 	 * @return  void
 	 */
-	public function __construct(array $config = array())
+	public function __construct(array $config = [])
 	{
 		$this->_header = new HTTP_Header;
 
@@ -210,7 +219,7 @@ class Kohana_Response implements HTTP_Response {
 		}
 		else
 		{
-			throw new Kohana_Exception(__METHOD__.' unknown status value : :value', array(':value' => $status));
+			throw new Kohana_Exception(__METHOD__.' unknown status value : :value', [':value' => $status]);
 		}
 	}
 
@@ -298,7 +307,7 @@ class Kohana_Response implements HTTP_Response {
 		if (is_array($key))
 		{
 			reset($key);
-			while (list($_key, $_value) = each($key))
+			foreach ($key as $_key => $_value)
 			{
 				$this->cookie($_key, $_value);
 			}
@@ -307,10 +316,10 @@ class Kohana_Response implements HTTP_Response {
 		{
 			if ( ! is_array($value))
 			{
-				$value = array(
+				$value = [
 					'value' => $value,
 					'expiration' => Cookie::$expiration
-				);
+				];
 			}
 			elseif ( ! isset($value['expiration']))
 			{
@@ -342,7 +351,7 @@ class Kohana_Response implements HTTP_Response {
 	 */
 	public function delete_cookies()
 	{
-		$this->_cookies = array();
+		$this->_cookies = [];
 		return $this;
 	}
 
@@ -374,6 +383,12 @@ class Kohana_Response implements HTTP_Response {
 	 *
 	 *     $request->send_file('media/packages/kohana.zip');
 	 *
+	 * Download a generated file:
+	 *
+	 *     $csv = tmpfile();
+	 *     fputcsv($csv, ['label1', 'label2']);
+	 *     $request->send_file($csv, $filename);
+	 *
 	 * Download generated content as a file:
 	 *
 	 *     $request->response($content);
@@ -381,7 +396,7 @@ class Kohana_Response implements HTTP_Response {
 	 *
 	 * [!!] No further processing can be done after this method is called!
 	 *
-	 * @param   string  $filename   filename with path, or TRUE for the current response
+	 * @param   string|resource|bool $filename filename with path, file stream, or TRUE for the current response
 	 * @param   string  $download   downloaded file name
 	 * @param   array   $options    additional options
 	 * @return  void
@@ -429,6 +444,24 @@ class Kohana_Response implements HTTP_Response {
 			// File data is no longer needed
 			unset($file_data);
 		}
+		else if (is_resource($filename) && get_resource_type($filename) === 'stream')
+		{
+			if (empty($download))
+			{
+				throw new Kohana_Exception('Download name must be provided for streaming files');
+			}
+
+			// Make sure this is a file handle
+			$file_meta = stream_get_meta_data($filename);
+			if ($file_meta['seekable'] === FALSE)
+			{
+				throw new Kohana_Exception('Resource must be a file handle');
+			}
+
+			// Handle file streams passed in as resources
+			$file = $filename;
+			$size = fstat($file)['size'];
+		}
 		else
 		{
 			// Get the complete file path
@@ -455,9 +488,9 @@ class Kohana_Response implements HTTP_Response {
 
 		if ( ! is_resource($file))
 		{
-			throw new Kohana_Exception('Could not read file to send: :file', array(
+			throw new Kohana_Exception('Could not read file to send: :file', [
 				':file' => $download,
-			));
+			]);
 		}
 
 		// Inline or download?
@@ -511,12 +544,6 @@ class Kohana_Response implements HTTP_Response {
 
 		// Manually stop execution
 		ignore_user_abort(TRUE);
-
-		if ( ! Kohana::$safe_mode)
-		{
-			// Keep the script running forever
-			set_time_limit(0);
-		}
 
 		// Send data in 16kb blocks
 		$block = 1024 * 16;
@@ -611,7 +638,7 @@ class Kohana_Response implements HTTP_Response {
 			}
 			else
 			{
-				$cookies = array();
+				$cookies = [];
 
 				// Parse each
 				foreach ($this->_cookies as $key => $value)
@@ -711,7 +738,7 @@ class Kohana_Response implements HTTP_Response {
 		// Keep the start in bounds.
 		$start = ($end < $start) ? 0 : max($start, 0);
 
-		return array($start, $end);
+		return [$start, $end];
 	}
 
 }

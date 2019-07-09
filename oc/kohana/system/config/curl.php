@@ -1,10 +1,10 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
-return array(
+return [
 
-	CURLOPT_USERAGENT      => 'Mozilla/5.0 (compatible; Kohana v'.Kohana::VERSION.' +http://kohanaframework.org/)',
+	CURLOPT_USERAGENT      => 'Mozilla/5.0 (compatible; Koseven v'.Kohana::VERSION.' +http://koseven.ga/)',
 	CURLOPT_CONNECTTIMEOUT => 5,
 	CURLOPT_TIMEOUT        => 5,
 	CURLOPT_HEADER         => FALSE,
 
-);
+];

@@ -1,13 +1,17 @@
-Icon?
-.DS_Store
-.svn
-code_coverage
-*~
-*.swp
-coverage
-kohana_release
+# Project files
+.idea
 nbproject
-build
+*.iml
+out
+gen
+
+# Kohana template
+application/cache/*
+application/logs/*
+
+# Composer
+/vendor/
 composer.lock
-composer.phar
-vendor/*
+
+# Coverage reports
+/build/logs/

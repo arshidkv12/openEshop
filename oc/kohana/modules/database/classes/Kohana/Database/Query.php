@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Database query wrapper.  See [Parameterized Statements](database/query/parameterized) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query
  * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Database_Query {
 
@@ -23,13 +23,13 @@ class Kohana_Database_Query {
 	protected $_sql;
 
 	// Quoted query parameters
-	protected $_parameters = array();
+	protected $_parameters = [];
 
 	// Return results as associative arrays or objects
 	protected $_as_object = FALSE;
 
 	// Parameters for __construct when using object results
-	protected $_object_params = array();
+	protected $_object_params = [];
 
 	/**
 	 * Creates a new SQL query of the specified type.
@@ -76,7 +76,7 @@ class Kohana_Database_Query {
 	 * Enables the query to be cached for a specified amount of time.
 	 *
 	 * @param   integer  $lifetime  number of seconds to cache, 0 deletes it from the cache
-	 * @param   boolean  whether or not to execute the query during a cache hit
+	 * @param   boolean  $force	whether or not to execute the query during a cache hit
 	 * @return  $this
 	 * @uses    Kohana::$cache_life
 	 */
@@ -103,7 +103,7 @@ class Kohana_Database_Query {
 	{
 		$this->_as_object = FALSE;
 
-		$this->_object_params = array();
+		$this->_object_params = [];
 
 		return $this;
 	}
@@ -193,7 +193,7 @@ class Kohana_Database_Query {
 		if ( ! empty($this->_parameters))
 		{
 			// Quote all of the values
-			$values = array_map(array($db, 'quote'), $this->_parameters);
+			$values = array_map([$db, 'quote'], $this->_parameters);
 
 			// Replace the values in the SQL
 			$sql = strtr($sql, $values);

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Abstract controller class. Controllers should only be created using a [Request].
  *
@@ -17,8 +17,8 @@
  * @package    Kohana
  * @category   Controller
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 abstract class Kohana_Controller {
 
@@ -76,7 +76,7 @@ abstract class Kohana_Controller {
 		{
 			throw HTTP_Exception::factory(404,
 				'The requested URL :uri was not found on this server.',
-				array(':uri' => $this->request->uri())
+				[':uri' => $this->request->uri()]
 			)->request($this->request);
 		}
 

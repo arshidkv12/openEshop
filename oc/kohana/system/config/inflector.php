@@ -1,8 +1,8 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
-return array(
+return [
 
-	'uncountable' => array(
+	'uncountable' => [
 		'access',
 		'advice',
 		'aircraft',
@@ -47,9 +47,9 @@ return array(
 		'water',
 		'weather',
 		'work',
-	),
+	],
 
-	'irregular' => array(
+	'irregular' => [
 		'appendix'    => 'appendices',
 		'cactus'      => 'cacti',
 		'calf'        => 'calves',
@@ -94,5 +94,5 @@ return array(
 		'wife'        => 'wives',
 		'woman'       => 'women',
 		'release'     => 'releases',
-	),
-);
+	],
+];

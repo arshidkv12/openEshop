@@ -1,12 +1,10 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
 /**
- * Minion exception
- *
- * @package    Kohana
- * @category   Minion
+ * @package    Kohana/Minion
  * @author     Kohana Team
- * @copyright  (c) 2009-2011 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Minion_Exception extends Kohana_Exception {
 	/**
@@ -19,7 +17,7 @@ class Kohana_Minion_Exception extends Kohana_Exception {
 	 * @param   Exception   $e
 	 * @return  boolean
 	 */
-	public static function handler(Exception $e)
+	public static function handler($e)
 	{
 		try
 		{
@@ -62,4 +60,5 @@ class Kohana_Minion_Exception extends Kohana_Exception {
 	{
 		return Kohana_Exception::text($this);
 	}
+
 }

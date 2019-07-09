@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * @package    Kohana/Codebench
  * @category   Tests
@@ -12,8 +12,7 @@ class Bench_MDDoIncludeViews extends Codebench {
 
 	public $loops = 10000;
 
-	public $subjects = array
-	(
+	public $subjects = [
 		// Valid matches
 		'{{one}} two {{three}}',
 		'{{userguide/examples/hello_world_error}}',
@@ -24,7 +23,7 @@ class Bench_MDDoIncludeViews extends Codebench {
 		'{{userguide/examples/hello_world_error}',
 		'{{userguide/examples/hello_world_error }}',
 		'{{userguide/examples/{{hello_world_error }}',
-	);
+	];
 
 	public function bench_original($subject)
 	{

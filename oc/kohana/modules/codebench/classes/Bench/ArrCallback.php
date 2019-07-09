@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php
 /**
  * @package    Kohana/Codebench
  * @category   Tests
@@ -12,8 +12,7 @@ class Bench_ArrCallback extends Codebench {
 
 	public $loops = 10000;
 
-	public $subjects = array
-	(
+	public $subjects = [
 		// Valid callback strings
 		'foo',
 		'foo::bar',
@@ -24,7 +23,7 @@ class Bench_ArrCallback extends Codebench {
 
 		// Invalid callback strings
 		'foo[apple,orange', // no closing bracket
-	);
+	];
 
 	public function bench_shadowhand($subject)
 	{
@@ -35,7 +34,7 @@ class Bench_ArrCallback extends Codebench {
 
 	public function bench_geert_regex_1($subject)
 	{
-		// Added ^ and $around the whole pattern
+		// Added ^ and $ around the whole pattern
 		if (preg_match('/^([^\[]*+)\[(.*)\]$/', $subject, $matches))
 			return $matches;
 	}

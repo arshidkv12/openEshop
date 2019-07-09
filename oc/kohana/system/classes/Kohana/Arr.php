@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Array helper.
  *
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Arr {
 
@@ -158,7 +158,7 @@ class Kohana_Arr {
 			{
 				// Handle wildcards
 
-				$values = array();
+				$values = [];
 				foreach ($array as $arr)
 				{
 					if ($value = Arr::path($arr, implode('.', $keys)))
@@ -228,7 +228,7 @@ class Kohana_Arr {
 
 			if ( ! isset($array[$key]))
 			{
-				$array[$key] = array();
+				$array[$key] = [];
 			}
 
 			$array = & $array[$key];
@@ -251,9 +251,9 @@ class Kohana_Arr {
 	public static function range($step = 10, $max = 100)
 	{
 		if ($step < 1)
-			return array();
+			return [];
 
-		$array = array();
+		$array = [];
 		for ($i = $step; $i <= $max; $i += $step)
 		{
 			$array[$i] = $i;
@@ -306,7 +306,7 @@ class Kohana_Arr {
 	 */
 	public static function extract($array, array $paths, $default = NULL)
 	{
-		$found = array();
+		$found = [];
 		foreach ($paths as $path)
 		{
 			Arr::set_path($found, $path, Arr::path($array, $path, $default));
@@ -329,7 +329,7 @@ class Kohana_Arr {
 	 */
 	public static function pluck($array, $key)
 	{
-		$values = array();
+		$values = [];
 
 		foreach ($array as $row)
 		{
@@ -582,7 +582,7 @@ class Kohana_Arr {
 			$command = explode('::', $command, 2);
 		}
 
-		return array($command, $params);
+		return [$command, $params];
 	}
 
 	/**
@@ -606,7 +606,7 @@ class Kohana_Arr {
 	{
 		$is_assoc = Arr::is_assoc($array);
 
-		$flat = array();
+		$flat = [];
 		foreach ($array as $key => $value)
 		{
 			if (is_array($value))

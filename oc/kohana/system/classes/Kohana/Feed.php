@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * RSS and Atom feed helper.
  *
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Feed {
 
@@ -50,7 +50,7 @@ class Kohana_Feed {
 
 		// Feed could not be loaded
 		if ($feed === FALSE)
-			return array();
+			return [];
 
 		$namespaces = $feed->getNamespaces(TRUE);
 
@@ -58,7 +58,7 @@ class Kohana_Feed {
 		$feed = isset($feed->channel) ? $feed->xpath('//item') : $feed->entry;
 
 		$i = 0;
-		$items = array();
+		$items = [];
 
 		foreach ($feed as $item)
 		{
@@ -87,9 +87,9 @@ class Kohana_Feed {
 	 */
 	public static function create($info, $items, $encoding = 'UTF-8')
 	{
-		$info += array('title' => 'Generated Feed', 'link' => '', 'generator' => 'KohanaPHP');
+		$info += ['title' => 'Generated Feed', 'link' => '', 'generator' => 'KohanaPHP'];
 
-		$feed = '<?phpxml version="1.0" encoding="'.$encoding.'"?><rss version="2.0"><channel></channel></rss>';
+		$feed = '<?xml version="1.0" encoding="'.$encoding.'"?><rss version="2.0"><channel></channel></rss>';
 		$feed = simplexml_load_string($feed);
 
 		foreach ($info as $name => $value)

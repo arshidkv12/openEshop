@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * HTTP Caching adaptor class that provides caching services to the
  * [Request_Client] class, using HTTP cache control logic as defined in
@@ -7,8 +7,8 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  * @since      3.2.0
  */
 class Kohana_HTTP_Cache {
@@ -41,7 +41,7 @@ class Kohana_HTTP_Cache {
 	 * @param   array   $options    options to set to this class
 	 * @return  HTTP_Cache
 	 */
-	public static function factory($cache, array $options = array())
+	public static function factory($cache, array $options = [])
 	{
 		if ( ! $cache instanceof Cache)
 		{
@@ -106,7 +106,7 @@ class Kohana_HTTP_Cache {
 	 *
 	 * @param   array $options 
 	 */
-	public function __construct(array $options = array())
+	public function __construct(array $options = [])
 	{
 		foreach ($options as $key => $value)
 		{
@@ -139,20 +139,20 @@ class Kohana_HTTP_Cache {
 			return $client->execute_request($request, $response);
 
 		// If this is a destructive request, by-pass cache completely
-		if (in_array($request->method(), array(
+		if (in_array($request->method(), [
 			HTTP_Request::POST, 
 			HTTP_Request::PUT, 
-			HTTP_Request::DELETE)))
+			HTTP_Request::DELETE]))
 		{
 			// Kill existing caches for this request
 			$this->invalidate_cache($request);
 
 			$response = $client->execute_request($request, $response);
 
-			$cache_control = HTTP_Header::create_cache_control(array(
+			$cache_control = HTTP_Header::create_cache_control([
 				'no-cache',
 				'must-revalidate'
-			));
+			]);
 
 			// Ensure client respects destructive action
 			return $response->headers('cache-control', $cache_control);
@@ -312,7 +312,7 @@ class Kohana_HTTP_Cache {
 			$cache_control = HTTP_Header::parse_cache_control($cache_control);
 
 			// If the no-cache or no-store directive is set, return
-			if (array_intersect($cache_control, array('no-cache', 'no-store')))
+			if (array_intersect($cache_control, ['no-cache', 'no-store']))
 				return FALSE;
 
 			// Check for private cache and get out of here if invalid

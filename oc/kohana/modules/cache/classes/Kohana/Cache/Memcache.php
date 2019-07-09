@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * [Kohana Cache](api/Kohana_Cache) Memcache driver,
  *
@@ -77,8 +77,8 @@
  * @category   Base
  * @version    2.0
  * @author     Kohana Team
- * @copyright  (c) 2009-2012 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 
@@ -104,7 +104,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 	 *
 	 * @var array
 	 */
-	protected $_default_config = array();
+	protected $_default_config = [];
 
 	/**
 	 * Constructs the memcache Kohana_Cache object
@@ -135,7 +135,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 		}
 
 		// Setup default server configuration
-		$this->_default_config = array(
+		$this->_default_config = [
 				'host'             => 'localhost',
 				'port'             => 11211,
 				'persistent'       => FALSE,
@@ -144,8 +144,8 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 				'retry_interval'   => 15,
 				'status'           => TRUE,
 				'instant_death'	   => TRUE,
-				'failure_callback' => array($this, '_failed_request'),
-		);
+				'failure_callback' => [$this, '_failed_request'],
+		];
 
 		// Add the memcache servers to the pool
 		foreach ($servers as $server)
@@ -155,7 +155,7 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 
 			if ( ! $this->_memcache->addServer($server['host'], $server['port'], $server['persistent'], $server['weight'], $server['timeout'], $server['retry_interval'], $server['status'], $server['failure_callback']))
 			{
-				throw new Cache_Exception('Memcache could not connect to host \':host\' using port \':port\'', array(':host' => $server['host'], ':port' => $server['port']));
+				throw new Cache_Exception('Memcache could not connect to host \':host\' using port \':port\'', [':host' => $server['host'], ':port' => $server['port']]);
 			}
 		}
 
@@ -317,8 +317,8 @@ class Kohana_Cache_Memcache extends Cache implements Cache_Arithmetic {
 				$host['timeout'],
 				$host['retry_interval'],
 				FALSE, // Server is offline
-				array($this, '_failed_request'
-				));
+				[$this, '_failed_request'
+				]);
 		}
 	}
 

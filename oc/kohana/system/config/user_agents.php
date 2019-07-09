@@ -1,8 +1,8 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
-return array(
+return [
 
-	'platform' => array(
+	'platform' => [
 		'windows nt 10.0'=> 'Windows 10',
 		'windows nt 6.3' => 'Windows 8.1',
 		'windows nt 6.2' => 'Windows 8',
@@ -45,9 +45,9 @@ return array(
 		'hp-ux'          => 'HP-UX',
 		'hurd'           => 'GNU/Hurd',
 		'unix'           => 'Unknown Unix OS',
-	),
+	],
 
-	'browser' => array(
+	'browser' => [
 		'Opera'             => 'Opera',
 		'Edge'              => 'Edge',
 		'MSIE'              => 'Internet Explorer',
@@ -74,9 +74,9 @@ return array(
 		'hotjava'           => 'HotJava',
 		'amaya'             => 'Amaya',
 		'IBrowse'           => 'IBrowse',
-	),
+	],
 
-	'mobile' => array(
+	'mobile' => [
 		'mobileexplorer' => 'Mobile Explorer',
 		'openwave'       => 'Open Wave',
 		'opera mini'     => 'Opera Mini',
@@ -95,9 +95,9 @@ return array(
 		'ipad'           => 'iPad',
 		'ipod'           => 'iPod',
 		'android'        => 'Android',
-	),
+	],
 
-	'robot' => array(
+	'robot' => [
 		'googlebot'           => 'Googlebot',
 		'msnbot'              => 'MSNBot',
 		'facebookexternalhit' => 'Facebook',
@@ -107,6 +107,6 @@ return array(
 		'fastcrawler'         => 'FastCrawler',
 		'infoseek'            => 'InfoSeek Robot 1.0',
 		'lycos'               => 'Lycos',
-	),
+	],
 
-);
+];

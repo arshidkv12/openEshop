@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * A port of [phputf8](http://phputf8.sourceforge.net/) to a unified set
  * of files. Provides multi-byte aware replacement string functions.
@@ -17,7 +17,7 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
+ * @copyright  (c) Kohana Team
  * @copyright  (c) 2005 Harry Fuecks
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
  */
@@ -31,7 +31,7 @@ class Kohana_UTF8 {
 	/**
 	 * @var  array  List of called methods that have had their required file included.
 	 */
-	public static $called = array();
+	public static $called = [];
 
 	/**
 	 * Recursively cleans arrays, objects, and strings. Removes ASCII control

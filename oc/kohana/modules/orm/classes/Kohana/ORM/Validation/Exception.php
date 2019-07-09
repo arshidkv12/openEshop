@@ -1,11 +1,11 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * ORM Validation exceptions.
  *
  * @package    Kohana/ORM
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_ORM_Validation_Exception extends Kohana_Exception {
 
@@ -13,7 +13,7 @@ class Kohana_ORM_Validation_Exception extends Kohana_Exception {
    * Array of validation objects
    * @var array
    */
-	protected $_objects = array();
+	protected $_objects = [];
 
 	/**
    * The alias of the main ORM model this exception was created for
@@ -144,7 +144,7 @@ class Kohana_ORM_Validation_Exception extends Kohana_Exception {
 	 */
 	protected function generate_errors($alias, array $array, $directory, $translate)
 	{
-		$errors = array();
+		$errors = [];
 
 		foreach ($array as $key => $object)
 		{

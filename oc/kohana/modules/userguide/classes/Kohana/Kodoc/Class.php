@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * Class documentation generator.
  *
  * @package    Kohana/Userguide
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2013 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Kodoc_Class extends Kodoc {
 
@@ -28,17 +28,17 @@ class Kohana_Kodoc_Class extends Kodoc {
 	/**
 	 * @var  array  array of tags, retrieved from the comment
 	 */
-	public $tags = array();
+	public $tags = [];
 
 	/**
 	 * @var  array  array of this classes constants
 	 */
-	public $constants = array();
+	public $constants = [];
 
 	/**
 	 * @var array Parent classes/interfaces of this class/interface
 	 */
-	public $parents = array();
+	public $parents = [];
 
 	/**
 	 * Loads a class and uses [reflection](http://php.net/reflection) to parse
@@ -97,7 +97,7 @@ class Kohana_Kodoc_Class extends Kodoc {
 	 */
 	public function constants()
 	{
-		$result = array();
+		$result = [];
 
 		foreach ($this->constants as $name => $value)
 		{
@@ -144,7 +144,7 @@ class Kohana_Kodoc_Class extends Kodoc {
 
 		$defaults = $this->class->getDefaultProperties();
 
-		usort($props, array($this,'_prop_sort'));
+		usort($props, [$this,'_prop_sort']);
 
 		foreach ($props as $key => $property)
 		{
@@ -182,7 +182,7 @@ class Kohana_Kodoc_Class extends Kodoc {
 	{
 		$methods = $this->class->getMethods();
 
-		usort($methods, array($this,'_method_sort'));
+		usort($methods, [$this,'_method_sort']);
 
 		foreach ($methods as $key => $method)
 		{
@@ -265,7 +265,7 @@ class Kohana_Kodoc_Class extends Kodoc {
 	 */
 	public function tags()
 	{
-		$result = array();
+		$result = [];
 
 		foreach ($this->tags as $name => $set)
 		{

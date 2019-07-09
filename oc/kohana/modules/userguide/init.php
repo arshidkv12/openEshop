@@ -1,33 +1,33 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
 // Static file serving (CSS, JS, images)
-Route::set('docs/media', 'guide-media(/<file>)', array('file' => '.+'))
-	->defaults(array(
+Route::set('docs/media', 'guide-media(/<file>)', ['file' => '.+'])
+	->defaults([
 		'controller' => 'Userguide',
 		'action'     => 'media',
 		'file'       => NULL,
-	));
+	]);
 
 // API Browser, if enabled
 if (Kohana::$config->load('userguide.api_browser') === TRUE)
 {
-	Route::set('docs/api', 'guide-api(/<class>)', array('class' => '[a-zA-Z0-9_]+'))
-		->defaults(array(
+	Route::set('docs/api', 'guide-api(/<class>)', ['class' => '[a-zA-Z0-9_]+'])
+		->defaults([
 			'controller' => 'Userguide',
 			'action'     => 'api',
 			'class'      => NULL,
-		));
+		]);
 }
 
 // User guide pages, in modules
-Route::set('docs/guide', 'guide(/<module>(/<page>))', array(
+Route::set('docs/guide', 'guide(/<module>(/<page>))', [
 		'page' => '.+',
-	))
-	->defaults(array(
+	])
+	->defaults([
 		'controller' => 'Userguide',
 		'action'     => 'docs',
 		'module'     => '',
-	));
+	]);
 
 // Simple autoloader used to encourage PHPUnit to behave itself.
 class Markdown_Autoloader {
@@ -41,4 +41,4 @@ class Markdown_Autoloader {
 }
 
 // Register the autoloader
-spl_autoload_register(array('Markdown_Autoloader', 'autoload'));
+spl_autoload_register(['Markdown_Autoloader', 'autoload']);

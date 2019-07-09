@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * @package    Kohana/Codebench
  * @category   Tests
@@ -12,8 +12,7 @@ class Bench_MDDoImageURL extends Codebench {
 
 	public $loops = 10000;
 
-	public $subjects = array
-	(
+	public $subjects = [
 		// Valid matches
 		'![Alt text](http://img.skitch.com/20091019-rud5mmqbf776jwua6hx9nm1n.png)',
 		'![Alt text](https://img.skitch.com/20091019-rud5mmqbf776jwua6hx9nm1n.png)',
@@ -24,11 +23,11 @@ class Bench_MDDoImageURL extends Codebench {
 
 		// Invalid matches
 		'![Alt text](img/install.png                 "No closing parenthesis"',
-	);
+	];
 
 	public function bench_original($subject)
 	{
-		return preg_replace_callback('~!\[(.+?)\]\((\S*(?:\s*".+?")?)\)~', array($this, '_add_image_url_original'), $subject);
+		return preg_replace_callback('~!\[(.+?)\]\((\S*(?:\s*".+?")?)\)~', [$this, '_add_image_url_original'], $subject);
 	}
 	protected function _add_image_url_original($matches)
 	{
@@ -45,7 +44,7 @@ class Bench_MDDoImageURL extends Codebench {
 	public function bench_optimized_callback($subject)
 	{
 		// Moved the check for "://" to the regex, simplifying the callback function
-		return preg_replace_callback('~!\[(.+?)\]\((?!\w++://)(\S*(?:\s*+".+?")?)\)~', array($this, '_add_image_url_optimized'), $subject);
+		return preg_replace_callback('~!\[(.+?)\]\((?!\w++://)(\S*(?:\s*+".+?")?)\)~', [$this, '_add_image_url_optimized'], $subject);
 	}
 	protected function _add_image_url_optimized($matches)
 	{

@@ -1,7 +1,14 @@
-<?php defined('SYSPATH') or die('No direct script access.');
-return array
-(
-/*	'memcache' => array(
+<?php
+return [
+/*	
+    'default' => 'file',                            // allows to specify default cache directl from config file
+    'prefix'  => 'cache1_',                          //used to avoid duplicates when using _sanitize_id
+    'apcu'   => array(
+        'driver'             => 'apcu',
+        'default_expire'     => 3600,
+        'prefix'             => 'cache_apcu_',       // if set uses this prefix instead of global 'prefix'
+    ),
+    'memcache' => array(
 		'driver'             => 'memcache',
 		'default_expire'     => 3600,
 		'compression'        => FALSE,              // Use Zlib compression (can cause issues with integers)
@@ -35,10 +42,6 @@ return array
 		),
 		'instant_death'      => TRUE,
 	),
-	'apc'      => array(
-		'driver'             => 'apc',
-		'default_expire'     => 3600,
-	),
 	'wincache' => array(
 		'driver'             => 'wincache',
 		'default_expire'     => 3600,
@@ -67,4 +70,4 @@ return array
 		)
 	)
 */
-);
+];

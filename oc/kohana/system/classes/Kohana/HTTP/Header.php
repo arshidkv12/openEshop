@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * The Kohana_HTTP_Header class provides an Object-Orientated interface
  * to HTTP headers. This can parse header arrays returned from the
@@ -9,8 +9,8 @@
  * @category   HTTP
  * @author     Kohana Team
  * @since      3.1.0
- * @copyright  (c) 2008-2014 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_HTTP_Header extends ArrayObject {
 
@@ -26,13 +26,13 @@ class Kohana_HTTP_Header extends ArrayObject {
 	 */
 	public static function accept_quality(array $parts)
 	{
-		$parsed = array();
+		$parsed = [];
 
 		// Resource light iteration
 		$parts_keys = array_keys($parts);
 		foreach ($parts_keys as $key)
 		{
-			$value = trim(str_replace(array("\r", "\n"), '', $parts[$key]));
+			$value = trim(str_replace(["\r", "\n"], '', $parts[$key]));
 
 			$pattern = '~\b(\;\s*+)?q\s*+=\s*+([.0-9]+)~';
 
@@ -73,12 +73,12 @@ class Kohana_HTTP_Header extends ArrayObject {
 
 		// If there is no accept, lets accept everything
 		if ($accepts === NULL)
-			return array('*' => array('*' => (float) HTTP_Header::DEFAULT_QUALITY));
+			return ['*' => ['*' => (float) HTTP_Header::DEFAULT_QUALITY]];
 
 		// Parse the accept header qualities
 		$accepts = HTTP_Header::accept_quality($accepts);
 
-		$parsed_accept = array();
+		$parsed_accept = [];
 
 		// This method of iteration uses less resource
 		$keys = array_keys($accepts);
@@ -111,7 +111,7 @@ class Kohana_HTTP_Header extends ArrayObject {
 	{
 		if ($charset === NULL)
 		{
-			return array('*' => (float) HTTP_Header::DEFAULT_QUALITY);
+			return ['*' => (float) HTTP_Header::DEFAULT_QUALITY];
 		}
 
 		return HTTP_Header::accept_quality(explode(',', (string) $charset));
@@ -131,11 +131,11 @@ class Kohana_HTTP_Header extends ArrayObject {
 		// Accept everything
 		if ($encoding === NULL)
 		{
-			return array('*' => (float) HTTP_Header::DEFAULT_QUALITY);
+			return ['*' => (float) HTTP_Header::DEFAULT_QUALITY];
 		}
 		elseif ($encoding === '')
 		{
-			return array('identity' => (float) HTTP_Header::DEFAULT_QUALITY);
+			return ['identity' => (float) HTTP_Header::DEFAULT_QUALITY];
 		}
 		else
 		{
@@ -156,12 +156,12 @@ class Kohana_HTTP_Header extends ArrayObject {
 	{
 		if ($language === NULL)
 		{
-			return array('*' => array('*' => (float) HTTP_Header::DEFAULT_QUALITY));
+			return ['*' => ['*' => (float) HTTP_Header::DEFAULT_QUALITY]];
 		}
 
 		$language = HTTP_Header::accept_quality(explode(',', (string) $language));
 
-		$parsed_language = array();
+		$parsed_language = [];
 
 		$keys = array_keys($language);
 		foreach ($keys as $key)
@@ -204,7 +204,7 @@ class Kohana_HTTP_Header extends ArrayObject {
 	 */
 	public static function create_cache_control(array $cache_control)
 	{
-		$parts = array();
+		$parts = [];
 
 		foreach ($cache_control as $key => $value)
 		{
@@ -238,7 +238,7 @@ class Kohana_HTTP_Header extends ArrayObject {
 		if ($directives === FALSE)
 			return FALSE;
 
-		$output = array();
+		$output = [];
 
 		foreach ($directives as $directive)
 		{
@@ -278,6 +278,11 @@ class Kohana_HTTP_Header extends ArrayObject {
 	protected $_accept_language;
 
 	/**
+	 * @var     array    Accept-Language: language list of parsed header
+	 */
+	protected $_accept_language_list;
+
+	/**
 	 * Constructor method for [Kohana_HTTP_Header]. Uses the standard constructor
 	 * of the parent `ArrayObject` class.
 	 *
@@ -287,7 +292,7 @@ class Kohana_HTTP_Header extends ArrayObject {
 	 * @param   int     $flags          Flags
 	 * @param   string  $iterator_class The iterator class to use
 	 */
-	public function __construct(array $input = array(), $flags = 0, $iterator_class = 'ArrayIterator')
+	public function __construct(array $input = [], $flags = 0, $iterator_class = 'ArrayIterator')
 	{
 		/**
 		 * @link http://www.w3.org/Protocols/rfc2616/rfc2616.html
@@ -360,7 +365,7 @@ class Kohana_HTTP_Header extends ArrayObject {
 		}
 		else
 		{
-			$current_value = array($current_value, $newval);
+			$current_value = [$current_value, $newval];
 		}
 
 		return parent::offsetSet($index, $current_value);
@@ -438,8 +443,6 @@ class Kohana_HTTP_Header extends ArrayObject {
 	 */
 	public function parse_header_string($resource, $header_line)
 	{
-		$headers = array();
-
 		if (preg_match_all('/(\w[^\s:]*):[ ]*([^\r\n]*(?:\r\n[ \t][^\r\n]*)*)/', $header_line, $matches))
 		{
 			foreach ($matches[0] as $key => $value)
@@ -811,6 +814,81 @@ class Kohana_HTTP_Header extends ArrayObject {
 	}
 
 	/**
+	 * Parses the `Accept-Language:` HTTP header and returns an array containing
+	 * the language names.
+	 *
+	 * @param   string  $language   charset string to parse
+	 * @return  array
+	 * @since   3.3.8
+	 */
+	protected static function _parse_language_header_as_list($language = NULL)
+	{
+		$languages = [];
+		$language  = explode(',', strtolower($language));
+
+		foreach ($language as $lang)
+		{
+			$matches = [];
+
+			if (preg_match('/([\w-]+)\s*(;.*q.*)?/', $lang, $matches))
+			{
+				$languages[] = $matches[1];
+			}
+		}
+
+		return $languages;
+	}
+
+	/**
+	 * Returns the reordered list of supplied `$languages` using the order
+	 * from the `Accept-Language:` HTTP header.
+	 *
+	 * @param   array   $languages  languages to order
+	 * @param   boolean $explicit
+	 * @return  array
+	 * @since   3.3.8
+	 */
+	protected function _order_languages_as_received(array $languages, $explicit = FALSE)
+	{
+		if ($this->_accept_language_list === NULL)
+		{
+			if ($this->offsetExists('Accept-Language'))
+			{
+				$language_header = strtolower($this->offsetGet('Accept-Language'));
+			}
+			else
+			{
+				$language_header = NULL;
+			}
+
+			$this->_accept_language_list = HTTP_Header::_parse_language_header_as_list($language_header);
+		}
+
+		$new_order = [];
+
+		foreach ($this->_accept_language_list as $accept_language)
+		{
+			foreach ($languages as $key => $language)
+			{
+				if (($explicit AND $accept_language == $language) OR
+					( ! $explicit AND substr($accept_language, 0, 2) == substr($language, 0, 2)))
+				{
+					$new_order[] = $language;
+
+					unset($languages[$key]);
+				}
+			}
+		}
+
+		foreach ($languages as $language)
+		{
+			$new_order[] = $language;
+		}
+
+		return $new_order;
+	}
+
+	/**
 	 * Returns the preferred language from the supplied array `$languages` based
 	 * on the `Accept-Language` header directive.
 	 *
@@ -826,8 +904,9 @@ class Kohana_HTTP_Header extends ArrayObject {
 	 */
 	public function preferred_language(array $languages, $explicit = FALSE)
 	{
-		$ceiling = 0;
+		$ceiling   = 0;
 		$preferred = FALSE;
+		$languages = $this->_order_languages_as_received($languages, $explicit);
 
 		foreach ($languages as $language)
 		{
@@ -863,7 +942,7 @@ class Kohana_HTTP_Header extends ArrayObject {
 		$status = $response->status();
 
 		// Create the response header
-		$processed_headers = array($protocol.' '.$status.' '.Response::$messages[$status]);
+		$processed_headers = [$protocol.' '.$status.' '.Response::$messages[$status]];
 
 		// Get the headers array
 		$headers = $response->headers()->getArrayCopy();

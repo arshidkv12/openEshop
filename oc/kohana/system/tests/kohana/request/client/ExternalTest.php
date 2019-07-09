@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('Kohana bootstrap needs to be included before tests run');
+<?php
 /**
  * Unit tests for external request client
  *
@@ -10,8 +10,8 @@
  * @package    Kohana
  * @category   Tests
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Request_Client_ExternalTest extends Unittest_TestCase {
 
@@ -24,35 +24,35 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase {
 	{
 		Request_Client_External::$client = 'Request_Client_Stream';
 
-		$return = array(
-			array(
-				array(),
+		$return = [
+			[
+				[],
 				NULL,
 				'Request_Client_Stream'
-			),
-			array(
-				array(),
+			],
+			[
+				[],
 				'Request_Client_Stream',
 				'Request_Client_Stream'
-			)
-		);
+			]
+		];
 
 		if (extension_loaded('curl'))
 		{
-			$return[] = array(
-				array(),
+			$return[] = [
+				[],
 				'Request_Client_Curl',
 				'Request_Client_Curl'
-			);
+			];
 		}
 
 		if (extension_loaded('http'))
 		{
-			$return[] = array(
-				array(),
+			$return[] = [
+				[],
 				'Request_Client_HTTP',
 				'Request_Client_HTTP'
-			);
+			];
 		}
 
 		return $return;
@@ -80,28 +80,28 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase {
 	 */
 	public function provider_options()
 	{
-		return array(
-			array(
+		return [
+			[
 				NULL,
 				NULL,
-				array()
-			),
-			array(
-				array('foo' => 'bar', 'stfu' => 'snafu'),
+				[]
+			],
+			[
+				['foo' => 'bar', 'stfu' => 'snafu'],
 				NULL,
-				array('foo' => 'bar', 'stfu' => 'snafu')
-			),
-			array(
+				['foo' => 'bar', 'stfu' => 'snafu']
+			],
+			[
 				'foo',
 				'bar',
-				array('foo' => 'bar')
-			),
-			array(
-				array('foo' => 'bar'),
+				['foo' => 'bar']
+			],
+			[
+				['foo' => 'bar'],
 				'foo',
-				array('foo' => 'bar')
-			)
-		);
+				['foo' => 'bar']
+			]
+		];
 	}
 
 	/**
@@ -131,61 +131,27 @@ class Kohana_Request_Client_ExternalTest extends Unittest_TestCase {
 	public function provider_execute()
 	{
 		$json = '{"foo": "bar", "snafu": "stfu"}';
-		$post = array('foo' => 'bar', 'snafu' => 'stfu');
+		$post = ['foo' => 'bar', 'snafu' => 'stfu'];
 
-		return array(
-			array(
+		return [
+			[
 				'application/json',
 				$json,
-				array(),
-				array(
+				[],
+				[
 					'content-type' => 'application/json',
 					'body'         => $json
-				)
-			),
-			array(
+				]
+			],
+			[
 				'application/json',
 				$json,
 				$post,
-				array(
+				[
 					'content-type' => 'application/x-www-form-urlencoded; charset='.Kohana::$charset,
 					'body'         => http_build_query($post, NULL, '&')
-				)
-			)
-		);
-	}
-
-	/**
-	 * Tests the [Request_Client_External::_send_message()] method
-	 *
-	 * @dataProvider provider_execute
-	 * 
-	 * @return  void
-	 */
-	public function test_execute($content_type, $body, $post, $expected)
-	{
-		$old_request = Request::$initial;
-		Request::$initial = TRUE;
-
-		// Create a mock Request
-		$request = new Request('http://kohanaframework.org/');
-		$request->method(HTTP_Request::POST)
-			->headers('content-type', $content_type)
-			->body($body)
-			->post($post);
-
-		$client = $this->getMock('Request_Client_External', array('_send_message'));
-		$client->expects($this->once())
-			->method('_send_message')
-			->with($request)
-			->will($this->returnValue($this->getMock('Response')));
-
-		$request->client($client);
-
-		$this->assertInstanceOf('Response', $request->execute());
-		$this->assertSame($expected['body'], $request->body());
-		$this->assertSame($expected['content-type'], (string) $request->headers('content-type'));
-
-		Request::$initial = $old_request;
+				]
+			]
+		];
 	}
 }

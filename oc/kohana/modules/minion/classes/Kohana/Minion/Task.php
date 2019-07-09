@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
 /**
  * Interface that all minion tasks must implement
  *
- * @package    Kohana
- * @category   Minion
+ * @package    Kohana/Minion
  * @author     Kohana Team
- * @copyright  (c) 2009-2011 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 abstract class Kohana_Minion_Task {
 
@@ -78,7 +78,7 @@ abstract class Kohana_Minion_Task {
 		{
 			throw new Minion_Exception_InvalidTask(
 				"Task ':task' is not a valid minion task",
-				array(':task' => $class)
+				[':task' => $class]
 			);
 		}
 
@@ -88,7 +88,7 @@ abstract class Kohana_Minion_Task {
 		{
 			throw new Minion_Exception_InvalidTask(
 				"Task ':task' is not a valid minion task",
-				array(':task' => $class)
+				[':task' => $class]
 			);
 		}
 
@@ -113,7 +113,7 @@ abstract class Kohana_Minion_Task {
 	 *
 	 * @var array
 	 */
-	protected $_options = array();
+	protected $_options = [];
 
 	/**
 	 * Populated with the accepted options for this task.
@@ -121,7 +121,7 @@ abstract class Kohana_Minion_Task {
 	 *
 	 * @var array
 	 */
-	protected $_accepted_options = array();
+	protected $_accepted_options = [];
 
 	protected $_method = '_execute';
 
@@ -208,7 +208,7 @@ abstract class Kohana_Minion_Task {
 		// Add a rule to each key making sure it's in the task
 		foreach ($validation->data() as $key => $value)
 		{
-			$validation->rule($key, array($this, 'valid_option'), array(':validation', ':field'));
+			$validation->rule($key, [$this, 'valid_option'], [':validation', ':field']);
 		}
 
 		return $validation;
@@ -294,13 +294,13 @@ abstract class Kohana_Minion_Task {
 	protected function _parse_doccomment($comment)
 	{
 		// Normalize all new lines to \n
-		$comment = str_replace(array("\r\n", "\n"), "\n", $comment);
+		$comment = str_replace(["\r\n", "\n"], "\n", $comment);
 
 		// Remove the phpdoc open/close tags and split
 		$comment = array_slice(explode("\n", $comment), 1, -1);
 
 		// Tag content
-		$tags        = array();
+		$tags = [];
 
 		foreach ($comment as $i => $line)
 		{
@@ -326,7 +326,7 @@ abstract class Kohana_Minion_Task {
 
 		$comment = trim(implode("\n", $comment));
 
-		return array($comment, $tags);
+		return [$comment, $tags];
 	}
 
 	/**
@@ -338,7 +338,7 @@ abstract class Kohana_Minion_Task {
 	 */
 	protected function _compile_task_list(array $files, $prefix = '')
 	{
-		$output = array();
+		$output = [];
 
 		foreach ($files as $file => $path)
 		{
@@ -361,4 +361,5 @@ abstract class Kohana_Minion_Task {
 
 		return $output;
 	}
+
 }

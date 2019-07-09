@@ -1,9 +1,9 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
-return array(
+return [
 
-	'email' => array(
+	'email' => [
 		'custom' => 'very nice email address you have there',
-	),
+	],
 
-);
+];

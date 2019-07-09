@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Acts as an object wrapper for HTML pages with embedded PHP, called "views".
  * Variables can be assigned with the view object and referenced locally within
@@ -7,13 +7,13 @@
  * @package    Kohana
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_View {
 
 	// Array of global variables
-	protected static $_global_data = array();
+	protected static $_global_data = [];
 
 	/**
 	 * Returns a new View object. If you do not define the "file" parameter,
@@ -126,7 +126,7 @@ class Kohana_View {
 	protected $_file;
 
 	// Array of local variables
-	protected $_data = array();
+	protected $_data = [];
 
 	/**
 	 * Sets the initial view filename and local data. Views should almost
@@ -177,7 +177,7 @@ class Kohana_View {
 		else
 		{
 			throw new Kohana_Exception('View variable is not set: :var',
-				array(':var' => $key));
+				[':var' => $key]);
 		}
 	}
 
@@ -262,9 +262,9 @@ class Kohana_View {
 	{
 		if (($path = Kohana::find_file('views', $file)) === FALSE)
 		{
-			throw new View_Exception('The requested view :file could not be found', array(
+			throw new View_Exception('The requested view :file could not be found', [
 				':file' => $file,
-			));
+			]);
 		}
 
 		// Store the file path locally

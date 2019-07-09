@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Date helper.
  *
  * @package    Kohana
  * @category   Helpers
  * @author     Kohana Team
- * @copyright  (c) 2007-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Date {
 
@@ -93,7 +93,7 @@ class Kohana_Date {
 		// Always integer
 		$step = (int) $step;
 
-		$seconds = array();
+		$seconds = [];
 
 		for ($i = $start; $i < $end; $i += $step)
 		{
@@ -138,7 +138,7 @@ class Kohana_Date {
 		// Default values
 		$step = (int) $step;
 		$long = (bool) $long;
-		$hours = array();
+		$hours = [];
 
 		// Set the default start if none was specified.
 		if ($start === NULL)
@@ -146,7 +146,7 @@ class Kohana_Date {
 			$start = ($long === FALSE) ? 1 : 0;
 		}
 
-		$hours = array();
+		$hours = [];
 
 		// 24-hour time has 24 hours, instead of 12
 		$size = ($long === TRUE) ? 23 : 12;
@@ -236,7 +236,7 @@ class Kohana_Date {
 		// We use caching for months, because time functions are used
 		if (empty($months[$year][$month]))
 		{
-			$months[$year][$month] = array();
+			$months[$year][$month] = [];
 
 			// Use date to find the number of days in the given month
 			$total = date('t', mktime(1, 0, 0, $month, 1, $year)) + 1;
@@ -275,7 +275,7 @@ class Kohana_Date {
 	 */
 	public static function months($format = NULL)
 	{
-		$months = array();
+		$months = [];
 
 		if ($format === Date::MONTHS_LONG OR $format === Date::MONTHS_SHORT)
 		{
@@ -309,7 +309,7 @@ class Kohana_Date {
 		$start = ($start === FALSE) ? (date('Y') - 5) : (int) $start;
 		$end   = ($end   === FALSE) ? (date('Y') + 5) : (int) $end;
 
-		$years = array();
+		$years = [];
 
 		for ($i = $start; $i <= $end; $i++)
 		{

@@ -1,8 +1,8 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
-return array(
+return [
 
 	'French' => 'Français',
 	'Hello, world!' => 'Bonjour, monde!',
 
-);
+];

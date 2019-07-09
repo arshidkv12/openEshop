@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Database query builder for DELETE statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query
  * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where {
 
@@ -87,9 +87,9 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 	public function reset()
 	{
 		$this->_table = NULL;
-		$this->_where = array();
+		$this->_where = [];
 
-		$this->_parameters = array();
+		$this->_parameters = [];
 
 		$this->_sql = NULL;
 

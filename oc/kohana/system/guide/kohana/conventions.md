@@ -79,27 +79,12 @@ Don't put any characters inside empty brackets.
 
 Arrays may be single line or multi-line.
 
-	array('a' => 'b', 'c' => 'd')
+	['a' => 'b', 'c' => 'd']
 	
-	array(
+	[
 		'a' => 'b', 
 		'c' => 'd',
-	)
-
-##### Opening Parenthesis
-
-The opening array parenthesis goes on the same line.
-
-	// Correct
-	array(
-		...
-	)
-
-	// Incorrect:
-	array
-	(
-		...
-	)
+	]
 
 ##### Closing parenthesis
 
@@ -108,55 +93,55 @@ The opening array parenthesis goes on the same line.
 The closing parenthesis of a multi-line single dimension array is placed on its own line, indented to the same level as the assignment or statement.
 
 	// Correct
-	$array = array(
+	$array = [
 		...
-	)
+	]
 
 	// Incorrect
-	$array = array(
+	$array = [
 		...
-		)
+		]
 
 ###### Multidimensional
 
 The nested array is indented one tab to the right, following the single dimension rules.
 
 	// Correct
-	array(
-		'arr' => array(
+	[
+		'arr' => [
 			...
-		),
-		'arr' => array(
+		],
+		'arr' => [
 			...
-		),
-	)
+		],
+	]
 	
-	array(
-		'arr' => array(...),
-		'arr' => array(...),
-	)
+	[
+		'arr' => [...],
+		'arr' => [...],
+	]
 	
 ##### Arrays as Function Arguments
 
 
 	// Correct
-	do(array(
+	do([
 		...
-	))
+	])
 	
 	// Incorrect
-	do(array(
+	do([
 		...
-		))
+		])
 
 As noted at the start of the array bracket section, single line syntax is also valid.
 
 	// Correct
-	do(array(...))
+	do([...])
 	
 	// Alternative for wrapping long lines
 	do($bar, 'this is a very long line',
-		array(...));
+		[...]);
 
 ### Naming Conventions
 

@@ -1,12 +1,12 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * Documentation generator.
  *
  * @package    Kohana/Userguide
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2013 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Kodoc {
 
@@ -29,7 +29,7 @@ class Kohana_Kodoc {
 
 		if (isset($matches[3]))
 		{
-			// If the first char is a $it is a property, e.g. Kohana::$base_url
+			// If the first char is a $ it is a property, e.g. Kohana::$base_url
 			if ($matches[3][0] === '$')
 			{
 				$member = '#property:'.substr($matches[3], 1);
@@ -44,7 +44,7 @@ class Kohana_Kodoc {
 			}
 		}
 
-		return HTML::anchor(Route::get('docs/api')->uri(array('class' => $class)).$member, $link, NULL, NULL, TRUE);
+		return HTML::anchor(Route::get('docs/api')->uri(['class' => $class]).$member, $link, NULL, NULL, TRUE);
 	}
 
 	public static function factory($class)
@@ -63,7 +63,7 @@ class Kohana_Kodoc {
 
 		ksort($classes);
 
-		$menu = array();
+		$menu = [];
 
 		$route = Route::get('docs/api');
 
@@ -78,7 +78,7 @@ class Kohana_Kodoc {
 			if ( ! Kodoc::show_class($class))
 				continue;
 
-			$link = HTML::anchor($route->uri(array('class' => $class->class->name)), $class->class->name);
+			$link = HTML::anchor($route->uri(['class' => $class->class->name]), $class->class->name);
 
 			if (isset($class->tags['package']))
 			{
@@ -123,7 +123,7 @@ class Kohana_Kodoc {
 			$list = Kohana::list_files('classes');
 		}
 
-		$classes = array();
+		$classes = [];
 
 		// This will be used a lot!
 		$ext_length = strlen(EXT);
@@ -161,7 +161,7 @@ class Kohana_Kodoc {
 	{
 		$list = Kodoc::classes($list);
 
-		$classes = array();
+		$classes = [];
 
 		foreach ($list as $class)
 		{
@@ -171,7 +171,7 @@ class Kohana_Kodoc {
 
 			$_class = new ReflectionClass($class);
 
-			$methods = array();
+			$methods = [];
 
 			foreach ($_class->getMethods() as $_method)
 			{
@@ -232,13 +232,13 @@ class Kohana_Kodoc {
 			if (preg_match('/^(\w+)\W(.*)$/D', $text, $matches))
 			{
 				return HTML::anchor(
-					$route->uri(array('class' => $matches[1])),
+					$route->uri(['class' => $matches[1]]),
 					$matches[1]
 				).' '.$matches[2];
 			}
 
 			return HTML::anchor(
-				$route->uri(array('class' => $text)),
+				$route->uri(['class' => $text]),
 				$text
 			);
 		}
@@ -264,13 +264,13 @@ class Kohana_Kodoc {
 	public static function parse($comment, $html = TRUE)
 	{
 		// Normalize all new lines to \n
-		$comment = str_replace(array("\r\n", "\n"), "\n", $comment);
+		$comment = str_replace(["\r\n", "\n"], "\n", $comment);
 
 		// Split into lines while capturing without leading whitespace
 		preg_match_all('/^\s*\* ?(.*)\n/m', $comment, $lines);
 
 		// Tag content
-		$tags = array();
+		$tags = [];
 
 		/**
 		 * Process a tag and add it to $tags
@@ -342,7 +342,7 @@ class Kohana_Kodoc {
 			$comment = Kodoc_Markdown::markdown($comment);
 		}
 
-		return array($comment, $tags);
+		return [$comment, $tags];
 	}
 
 	/**
@@ -388,7 +388,7 @@ class Kohana_Kodoc {
 			return TRUE;
 
 		// Get the package tags for this class (as an array)
-		$packages = Arr::get($class->tags, 'package', array('None'));
+		$packages = Arr::get($class->tags, 'package', ['None']);
 
 		$show_this = FALSE;
 

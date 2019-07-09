@@ -1,11 +1,12 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
-return array(
+return [
+
 	// Leave this alone
-	'modules' => array(
+	'modules' => [
 
 		// This should be the path to this modules userguide pages, without the 'guide/'. Ex: '/guide/modulename/' would be 'modulename'
-		'image' => array(
+		'image' => [
 
 			// Whether this modules userguide pages should be shown
 			'enabled' => TRUE,
@@ -17,7 +18,8 @@ return array(
 			'description' => 'Image manipulation.',
 			
 			// Copyright message, shown in the footer for this module
-			'copyright' => '&copy; 2008–2012 Kohana Team',
-		)	
-	)
-);
+			'copyright' => '&copy; 2008–2017 Kohana Team',
+		]	
+	]
+
+];

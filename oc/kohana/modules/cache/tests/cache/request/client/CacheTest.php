@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('Kohana bootstrap needs to be included before tests run');
+<?php
 /**
  * Unit tests for request client cache logic
  *
@@ -10,8 +10,8 @@
  * @package    Kohana
  * @category   Tests
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 
@@ -23,10 +23,10 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 	public function setUp()
 	{
 		Route::set('welcome', 'welcome/index')
-			->defaults(array(
+			->defaults([
 				'controller' => 'welcome',
 				'action'     => 'index'
-			));
+			]);
 
 		parent::setUp();
 	}
@@ -42,7 +42,7 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 		$request       = new Request('welcome/index');
 		$response      = new Response;
 
-		$client_mock   = $this->getMock('Request_Client_Internal');
+		$client_mock   = $this->createMock('Request_Client_Internal');
 
 		$request->client($client_mock);
 		$client_mock->expects($this->exactly(0))
@@ -63,12 +63,12 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 	public function test_cache_miss()
 	{
 		$route = new Route('welcome/index');
-		$route->defaults(array(
+		$route->defaults([
 			'controller' => 'Kohana_Request_CacheTest_Dummy',
 			'action'     => 'index',
-		));
+		]);
 
-		$request       = new Request('welcome/index', NULL, array($route));
+		$request       = new Request('welcome/index', NULL, [$route]);
 		$cache_mock    = $this->_get_cache_mock();
 
 		$request->client()->cache(HTTP_Cache::factory($cache_mock));
@@ -96,9 +96,9 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 		$cache_mock    = $this->_get_cache_mock();
 		$response      = Response::factory();
 
-		$request->client()->cache(new HTTP_Cache(array(
+		$request->client()->cache(new HTTP_Cache([
 			'cache' => $cache_mock
-			)
+			]
 		));
 
 		$response->headers('cache-control', 'max-age='.$lifetime);
@@ -134,18 +134,18 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 		$request       = new Request('welcome/index');
 		$cache_mock    = $this->_get_cache_mock();
 
-		$request->client()->cache(new HTTP_Cache(array(
+		$request->client()->cache(new HTTP_Cache([
 			'cache' => $cache_mock
-			)
+			]
 		));
 
 		$response = Response::factory();
 
-		$response->headers(array(
+		$response->headers([
 			'cache-control'                  => 'max-age='.$lifetime,
 			HTTP_Cache::CACHE_STATUS_KEY => 
 				HTTP_Cache::CACHE_STATUS_HIT
-		));
+		]);
 
 		$key = $request->client()->cache()->create_cache_key($request);
 
@@ -168,57 +168,57 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 	 */
 	public function provider_set_cache()
 	{
-		return array(
-			array(
-				new HTTP_Header(array('cache-control' => 'no-cache')),
-				array('no-cache' => NULL),
+		return [
+			[
+				new HTTP_Header(['cache-control' => 'no-cache']),
+				['no-cache' => NULL],
 				FALSE,
-			),
-			array(
-				new HTTP_Header(array('cache-control' => 'no-store')),
-				array('no-store' => NULL),
+			],
+			[
+				new HTTP_Header(['cache-control' => 'no-store']),
+				['no-store' => NULL],
 				FALSE,
-			),
-			array(
-				new HTTP_Header(array('cache-control' => 'max-age=100')),
-				array('max-age' => '100'),
+			],
+			[
+				new HTTP_Header(['cache-control' => 'max-age=100']),
+				['max-age' => '100'],
 				TRUE
-			),
-			array(
-				new HTTP_Header(array('cache-control' => 'private')),
-				array('private' => NULL),
+			],
+			[
+				new HTTP_Header(['cache-control' => 'private']),
+				['private' => NULL],
 				FALSE
-			),
-			array(
-				new HTTP_Header(array('cache-control' => 'private, max-age=100')),
-				array('private' => NULL, 'max-age' => '100'),
+			],
+			[
+				new HTTP_Header(['cache-control' => 'private, max-age=100']),
+				['private' => NULL, 'max-age' => '100'],
 				FALSE
-			),
-			array(
-				new HTTP_Header(array('cache-control' => 'private, s-maxage=100')),
-				array('private' => NULL, 's-maxage' => '100'),
+			],
+			[
+				new HTTP_Header(['cache-control' => 'private, s-maxage=100']),
+				['private' => NULL, 's-maxage' => '100'],
 				TRUE
-			),
-			array(
-				new HTTP_Header(array(
+			],
+			[
+				new HTTP_Header([
 					'expires' => date('m/d/Y', strtotime('-1 day')),
-				)),
-				array(),
+				]),
+				[],
 				FALSE
-			),
-			array(
-				new HTTP_Header(array(
+			],
+			[
+				new HTTP_Header([
 					'expires' => date('m/d/Y', strtotime('+1 day')),
-				)),
-				array(),
+				]),
+				[],
 				TRUE
-			),
-			array(
-				new HTTP_Header(array()),
-				array(),
+			],
+			[
+				new HTTP_Header([]),
+				[],
 				TRUE
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -234,7 +234,7 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 		/**
 		 * Set up a mock response object to test with
 		 */
-		$response = $this->getMock('Response');
+		$response = $this->createMock('Response');
 
 		$response->expects($this->any())
 			->method('headers')
@@ -252,7 +252,7 @@ class Kohana_Request_Client_CacheTest extends Unittest_TestCase {
 	 */
 	protected function _get_cache_mock()
 	{
-		return $this->getMock('Cache_File', array(), array(), '', FALSE);
+		return $this->createMock('Cache_File');
 	}
 } // End Kohana_Request_Client_CacheTest
 

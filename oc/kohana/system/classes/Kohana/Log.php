@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Message logging with observer-based log writing.
  *
@@ -7,8 +7,8 @@
  * @package    Kohana
  * @category   Logging
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_Log {
 
@@ -47,7 +47,7 @@ class Kohana_Log {
 			Log::$_instance = new Log;
 
 			// Write the logs at shutdown
-			register_shutdown_function(array(Log::$_instance, 'write'));
+			register_shutdown_function([Log::$_instance, 'write']);
 		}
 
 		return Log::$_instance;
@@ -56,12 +56,12 @@ class Kohana_Log {
 	/**
 	 * @var  array  list of added messages
 	 */
-	protected $_messages = array();
+	protected $_messages = [];
 
 	/**
 	 * @var  array  list of log writers
 	 */
-	protected $_writers = array();
+	protected $_writers = [];
 
 	/**
 	 * Attaches a log writer, and optionally limits the levels of messages that
@@ -74,18 +74,17 @@ class Kohana_Log {
 	 * @param   integer     $min_level  min level to write IF $levels is not an array
 	 * @return  Log
 	 */
-	public function attach(Log_Writer $writer, $levels = array(), $min_level = 0)
+	public function attach(Log_Writer $writer, $levels = [], $min_level = 0)
 	{
 		if ( ! is_array($levels))
 		{
 			$levels = range($min_level, $levels);
 		}
 
-		$this->_writers["{$writer}"] = array
-		(
+		$this->_writers["{$writer}"] = [
 			'object' => $writer,
 			'levels' => $levels
-		);
+		];
 
 		return $this;
 	}
@@ -151,12 +150,11 @@ class Kohana_Log {
 
 		if ($additional == NULL)
 		{
-			$additional = array();
+			$additional = [];
 		}
 
 		// Create a new message
-		$this->_messages[] = array
-		(
+		$this->_messages[] = [
 			'time'       => time(),
 			'level'      => $level,
 			'body'       => $message,
@@ -166,7 +164,7 @@ class Kohana_Log {
 			'class'      => isset($trace[0]['class']) ? $trace[0]['class'] : NULL,
 			'function'   => isset($trace[0]['function']) ? $trace[0]['function'] : NULL,
 			'additional' => $additional,
-		);
+		];
 
 		if (Log::$write_on_add)
 		{
@@ -196,7 +194,7 @@ class Kohana_Log {
 		$messages = $this->_messages;
 
 		// Reset the messages array
-		$this->_messages = array();
+		$this->_messages = [];
 
 		foreach ($this->_writers as $writer)
 		{
@@ -208,7 +206,7 @@ class Kohana_Log {
 			else
 			{
 				// Filtered messages
-				$filtered = array();
+				$filtered = [];
 
 				foreach ($messages as $message)
 				{

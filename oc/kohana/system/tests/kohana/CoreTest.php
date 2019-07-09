@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('Kohana bootstrap needs to be included before tests run');
+<?php
 
 /**
  * Tests Kohana Core
@@ -13,12 +13,12 @@
  * @category   Tests
  * @author     Kohana Team
  * @author     Jeremy Bush <contractfrombelow@gmail.com>
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @copyright  (c) Kohana Team
+ * @license    https://koseven.ga/LICENSE.md
  */
 class Kohana_CoreTest extends Unittest_TestCase
 {
-	protected $old_modules = array();
+	protected $old_modules = [];
 
 	/**
 	 * Captures the module list as it was before this test
@@ -52,13 +52,12 @@ class Kohana_CoreTest extends Unittest_TestCase
 	 */
 	public function provider_sanitize()
 	{
-		return array(
+		return [
 			// $value, $result
-			array('foo', 'foo'),
-			array("foo\r\nbar", "foo\nbar"),
-			array("foo\rbar", "foo\nbar"),
-			array("Is your name O\'reilly?", "Is your name O'reilly?")
-		);
+			['foo', 'foo'],
+			["foo\r\nbar", "foo\nbar"],
+			["foo\rbar", "foo\nbar"],
+		];
 	}
 
 	/**
@@ -72,8 +71,6 @@ class Kohana_CoreTest extends Unittest_TestCase
 	 */
 	public function test_sanitize($value, $result)
 	{
-		$this->setEnvironment(array('Kohana::$magic_quotes' => TRUE));
-
 		$this->assertSame($result, Kohana::sanitize($value));
 	}
 
@@ -106,7 +103,7 @@ class Kohana_CoreTest extends Unittest_TestCase
 	{
 		$this->assertFalse(Kohana::find_file('configy', 'zebra'));
 
-		$this->assertSame(array(), Kohana::find_file('configy', 'zebra', NULL, TRUE));
+		$this->assertSame([], Kohana::find_file('configy', 'zebra', NULL, TRUE));
 	}
 
 	/**
@@ -122,26 +119,7 @@ class Kohana_CoreTest extends Unittest_TestCase
 		$this->assertInternalType('array', $files);
 		$this->assertGreaterThan(3, count($files));
 
-		$this->assertSame(array(), Kohana::list_files('geshmuck'));
-	}
-
-	/**
-	 * Tests Kohana::globals()
-	 *
-	 * @test
-	 * @covers Kohana::globals
-	 */
-	public function test_globals_removes_user_def_globals()
-	{
-		$GLOBALS['hackers'] = 'foobar';
-		$GLOBALS['name'] = array('','','');
-		$GLOBALS['_POST'] = array();
-
-		Kohana::globals();
-
-		$this->assertFalse(isset($GLOBALS['hackers']));
-		$this->assertFalse(isset($GLOBALS['name']));
-		$this->assertTrue(isset($GLOBALS['_POST']));
+		$this->assertSame([], Kohana::list_files('geshmuck'));
 	}
 
 	/**
@@ -151,12 +129,12 @@ class Kohana_CoreTest extends Unittest_TestCase
 	 */
 	public function provider_cache()
 	{
-		return array(
+		return [
 			// $value, $result
-			array('foo', 'hello, world', 10),
-			array('bar', NULL, 10),
-			array('bar', NULL, -10),
-		);
+			['foo', 'hello, world', 10],
+			['bar', NULL, 10],
+			['bar', NULL, -10],
+		];
 	}
 
 	/**
@@ -176,27 +154,51 @@ class Kohana_CoreTest extends Unittest_TestCase
 	}
 
 	/**
+	 * Tests Kohana::find_file() cache is saved on shutdown.
+	 * 
+	 * @test
+	 */
+	/*public function test_find_file_cache_saved()
+	{
+		$old_caching     = Kohana::$caching;
+		$old_errors      = Kohana::$errors;
+		Kohana::$caching = TRUE;
+		Kohana::$errors  = FALSE;
+
+		// trigger find_file() so Kohana::$_files_changed is set to TRUE
+		Kohana::find_file('abc', 'def');
+
+		// trigger shutdown so kohana write to file cache
+		Kohana::shutdown_handler();
+
+		$this->assertInternalType('array', Kohana::file_cache('Kohana::find_file()'));	    
+
+		Kohana::$caching = $old_caching;
+		Kohana::$errors  = $old_errors;
+	}*/
+
+	/**
 	 * Provides test data for test_message()
 	 *
 	 * @return array
 	 */
 	public function provider_message()
 	{
-		return array(
-			array('no_message_file', 'anything', 'default', 'default'),
-			array('no_message_file', NULL, 'anything', array()),
-			array('kohana_core_message_tests', 'bottom_only', 'anything', 'inherited bottom message'),
-			array('kohana_core_message_tests', 'cfs_replaced', 'anything', 'overriding cfs_replaced message'),
-			array('kohana_core_message_tests', 'top_only', 'anything', 'top only message'),
-			array('kohana_core_message_tests', 'missing', 'default', 'default'),
-			array('kohana_core_message_tests', NULL, 'anything',
-				array(
+		return [
+			['no_message_file', 'anything', 'default', 'default'],
+			['no_message_file', NULL, 'anything', []],
+			['kohana_core_message_tests', 'bottom_only', 'anything', 'inherited bottom message'],
+			['kohana_core_message_tests', 'cfs_replaced', 'anything', 'overriding cfs_replaced message'],
+			['kohana_core_message_tests', 'top_only', 'anything', 'top only message'],
+			['kohana_core_message_tests', 'missing', 'default', 'default'],
+			['kohana_core_message_tests', NULL, 'anything',
+				[
 					'bottom_only'  => 'inherited bottom message',
 					'cfs_replaced' => 'overriding cfs_replaced message',
 					'top_only'     => 'top only message'
-				)
-			),
-		);
+				]
+			],
+		];
 	}
 
 	/**
@@ -213,7 +215,7 @@ class Kohana_CoreTest extends Unittest_TestCase
 	public function test_message($file, $key, $default, $expected)
 	{
 		$test_path = realpath(dirname(__FILE__).'/../test_data/message_tests');
-		Kohana::modules(array('top' => "$test_path/top_module", 'bottom' => "$test_path/bottom_module"));
+		Kohana::modules(['top' => "$test_path/top_module", 'bottom' => "$test_path/bottom_module"]);
 
 		$this->assertEquals($expected, Kohana::message($file, $key, $default, $expected));
 	}
@@ -225,9 +227,9 @@ class Kohana_CoreTest extends Unittest_TestCase
 	 */
 	public function provider_error_handler()
 	{
-		return array(
-			array(1, 'Foobar', 'foobar.php', __LINE__),
-		);
+		return [
+			[1, 'Foobar', 'foobar.php', __LINE__],
+		];
 	}
 
 	/**
@@ -264,10 +266,10 @@ class Kohana_CoreTest extends Unittest_TestCase
 	 */
 	public function provider_modules_detects_invalid_modules()
 	{
-		return array(
-			array(array('unittest' => MODPATH.'fo0bar')),
-			array(array('unittest' => MODPATH.'unittest', 'fo0bar' => MODPATH.'fo0bar')),
-		);
+		return [
+			[['unittest' => MODPATH.'fo0bar']],
+			[['unittest' => MODPATH.'unittest', 'fo0bar' => MODPATH.'fo0bar']],
+		];
 	}
 
 	/**
@@ -306,10 +308,10 @@ class Kohana_CoreTest extends Unittest_TestCase
 	 */
 	public function provider_modules_sets_and_returns_valid_modules()
 	{
-		return array(
-			array(array(), array()),
-			array(array('module' => __DIR__), array('module' => $this->dirSeparator(__DIR__.'/'))),
-		);
+		return [
+			[[], []],
+			[['module' => __DIR__], ['module' => $this->dirSeparator(__DIR__.'/')]],
+		];
 	}
 
 	/**

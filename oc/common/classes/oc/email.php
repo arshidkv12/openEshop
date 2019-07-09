@@ -44,7 +44,7 @@ class OC_Email {
                 $email_encoded = $to;
 
             //encodig the email for extra security
-            $encrypt = new Encrypt(Core::config('auth.hash_key'), MCRYPT_MODE_NOFB, MCRYPT_RIJNDAEL_128);
+            $encrypt = new Encrypt(Core::config('auth.hash_key'), '', Core::config('auth.ql_cipher'));
             $email_encoded = Base64::fix_to_url($encrypt->encode($email_encoded));
         }
 
